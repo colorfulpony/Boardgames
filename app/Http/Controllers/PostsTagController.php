@@ -11,8 +11,10 @@ class PostsTagController extends Controller
 {
     public function index()
     {
-        $tags = PostsTag::all();
-        // dd(PostsTag::query()->paginate());
+        if(!auth()->user()->permissions['items_view']) {
+            abort(403);
+        }
+
         return Inertia::render('PostsTags/Index', [
             'tags' => PostsTag::query()
             ->when(Request::input('search'), function ($query, $search) {
@@ -30,11 +32,19 @@ class PostsTagController extends Controller
 
     public function create()
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         return Inertia::render('PostsTags/Create');
     }
 
     public function store(Request $request)
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'title' => ['required', 'string'],
             'slug' => ['required', 'string'],
@@ -48,12 +58,20 @@ class PostsTagController extends Controller
 
     public function edit($postsTagId)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+
         $postsTag = PostsTag::findOrFail($postsTagId);
         return Inertia::render('PostsTags/Edit', compact('postsTag'));
     }
 
     public function update(Request $request)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+        
         $postsTagId = $request->input('id');
 
 

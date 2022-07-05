@@ -45,7 +45,16 @@ class User extends Authenticatable
 
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Hash::make($value);
+        $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
+    }
+
+    public function getPermissionsAttribute()
+    {
+        return [
+            'items_view' => $this->role == 1 || $this->role == 2,
+            'items_create' => $this->role == 1,
+            'items_update' => $this->role == 1,
+        ];
     }
 
     public function userAdress()

@@ -11,6 +11,10 @@ class ProductController extends Controller
 {
     public function index()
     {
+        if(!auth()->user()->permissions['items_view']) {
+            abort(403);
+        }
+
         return Inertia::render('Products/Index', [
             'products' => Product::query()
             ->when(Request::input('search'), function ($query, $search) {
@@ -35,6 +39,10 @@ class ProductController extends Controller
 
     public function create()
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         return Inertia::render('Products/Create', [
             'productCategories' => collect(ProductCategory::query()->select(['id', 'title'])->get())
         ]);
@@ -42,6 +50,10 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'name' => 'required|string|unique:products',
             'price' => 'required|integer',
@@ -60,6 +72,10 @@ class ProductController extends Controller
 
     public function edit($productId)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+
         $product = Product::findOrFail($productId);
         return Inertia::render('Products/Edit', [
             'product' => $product,
@@ -69,6 +85,10 @@ class ProductController extends Controller
 
     public function update(Request $request)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+        
         $productId = $request->input('id');
 
         $data = $request->validate([

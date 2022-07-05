@@ -20,7 +20,7 @@ class ProductCategoryFactory extends Factory
         $title = $this->faker->word();
         return [
             'title' => $title,
-            'slug' => Str::slug($this->faker->sentence()),
+            'slug' => Str::slug($title),
             'description' => $this->faker->text(100, 500),
         ];
     }

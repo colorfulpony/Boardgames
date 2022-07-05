@@ -10,6 +10,10 @@ class OrderController extends Controller
 {
     public function index()
     {
+        if(!auth()->user()->permissions['items_view']) {
+            abort(403);
+        }
+
         return Inertia::render('Orders/Index', [
             'orders' => Order::query()
             ->when(Request::input('search'), function ($query, $search) {
@@ -27,11 +31,19 @@ class OrderController extends Controller
 
     public function create()
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         return Inertia::render('Orders/Create');
     }
 
     public function store(Request $request)
     {
+        if(!auth()->user()->permissions['items_create']) {
+            abort(403);
+        }
+
         $data = $request->validate([
             'delivery_adress' => 'required|string',
             'full_cost' => 'required|integer',
@@ -49,6 +61,10 @@ class OrderController extends Controller
 
     public function edit($orderId)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+
         $order = Order::findOrFail($orderId);
         return Inertia::render('Orders/Edit', [
             'order' => $order
@@ -57,6 +73,10 @@ class OrderController extends Controller
 
     public function update(Request $request)
     {
+        if(!auth()->user()->permissions['items_update']) {
+            abort(403);
+        }
+        
         $orderId = $request->input('id');
 
 

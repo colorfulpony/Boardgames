@@ -12,6 +12,7 @@
 
         <div class="flex items-center">
             <Link
+                v-if="can.create"
                 href="/post/create"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-5"
                 >Create</Link
@@ -65,6 +66,7 @@
                     </th>
                     <td class="px-6 py-4 text-right">
                         <Link
+                            v-if="can.update"
                             :href="`/post/${post.id}/edit`"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                             >Edit</Link
@@ -88,6 +90,7 @@ import debounce from "lodash/debounce";
 let props = defineProps({
     posts: Object,
     filters: Object,
+    can: Object
 });
 
 let search = ref(props.filters.search);

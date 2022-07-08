@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Post;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostPolicy
+class ProductPolicy
 {
     use HandlesAuthorization;
 
@@ -17,6 +17,11 @@ class PostPolicy
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user)
+    {
+        return $user->permissions['items_view'];
+    }
+
+    public function view(User $user, Product $product)
     {
         return $user->permissions['items_view'];
     }
@@ -36,7 +41,6 @@ class PostPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function update(User $user)

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
@@ -10,40 +11,29 @@ class OrderController extends Controller
 {
     public function index()
     {
-        if(!auth()->user()->permissions['items_view']) {
-            abort(403);
-        }
-
         return Inertia::render('Orders/Index', [
             'orders' => Order::query()
-            ->when(Request::input('search'), function ($query, $search) {
-                $query->where('delivery_adress', 'like', "%{$search}%");
-            })
-            ->select(['id', 'delivery_adress', 'full_cost', 'date_of_order'])
-            ->paginate(10)
-            ->withQueryString(),
-            // 'can' => [
-            //     'create' => Auth::user()->can('create', User::class)
-            // ]
+                ->when(Request::input('search'), function ($query, $search) {
+                    $query->where('delivery_adress', 'like', "%{$search}%");
+                })
+                ->select(['id', 'delivery_adress', 'full_cost', 'date_of_order'])
+                ->paginate(10)
+                ->withQueryString(),
+            'can' => [
+                'create' => Auth::user()->can('create', Order::class),
+                'edit' => Auth::user()->can('update', Order::class),
+            ],
             'filters' => Request::only(['search']),
         ]);
     }
 
     public function create()
     {
-        if(!auth()->user()->permissions['items_create']) {
-            abort(403);
-        }
-
         return Inertia::render('Orders/Create');
     }
 
     public function store(Request $request)
     {
-        if(!auth()->user()->permissions['items_create']) {
-            abort(403);
-        }
-
         $data = $request->validate([
             'delivery_adress' => 'required|string',
             'full_cost' => 'required|integer',
@@ -61,10 +51,6 @@ class OrderController extends Controller
 
     public function edit($orderId)
     {
-        if(!auth()->user()->permissions['items_update']) {
-            abort(403);
-        }
-
         $order = Order::findOrFail($orderId);
         return Inertia::render('Orders/Edit', [
             'order' => $order
@@ -73,10 +59,6 @@ class OrderController extends Controller
 
     public function update(Request $request)
     {
-        if(!auth()->user()->permissions['items_update']) {
-            abort(403);
-        }
-        
         $orderId = $request->input('id');
 
 

@@ -8,10 +8,11 @@
         />
     </Head>
     <div class="flex justify-between">
-        <h1 class="text-4xl font-bold">Tags</h1>
+        <h1 class="text-4xl font-bold">Posts Tags</h1>
 
         <div class="flex items-center">
             <Link
+                v-if="can.create"
                 href="/posts-tag/create"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-5"
                 >Create</Link
@@ -58,6 +59,7 @@
                     </th>
                     <td class="px-6 py-4 text-right">
                         <Link
+                            v-if="can.update"
                             :href="`/posts-tag/${tag.id}/edit`"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                             >Edit</Link
@@ -81,9 +83,12 @@ import debounce from "lodash/debounce";
 let props = defineProps({
     tags: Object,
     filters: Object,
+    can: Object
 });
 
 let search = ref(props.filters.search);
+
+console.log(props.can)
 
 watch(
     search,

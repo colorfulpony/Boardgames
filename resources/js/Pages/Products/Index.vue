@@ -12,6 +12,7 @@
 
         <div class="flex items-center">
             <Link
+                v-if="can.create"
                 href="/product/create"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-5"
                 >Create</Link
@@ -67,6 +68,7 @@
                     </th>
                     <td class="px-6 py-4 text-right">
                         <Link
+                            v-if="can.update"
                             :href="`/product/${product.id}/edit`"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                             >Edit</Link
@@ -82,6 +84,15 @@
     </div>
 </template>
 
+<!-- <script>
+export default {
+    mounted() {
+        console.log(this.props.can)
+    },
+}
+</script> -->
+
+
 <script setup>
 import Paginator from "../Shared/Paginator.vue";
 import { ref, watch } from "vue";
@@ -91,6 +102,7 @@ import debounce from "lodash/debounce";
 let props = defineProps({
     products: Object,
     filters: Object,
+    can: Object
 });
 
 let search = ref(props.filters.search);

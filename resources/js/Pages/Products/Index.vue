@@ -68,7 +68,7 @@
                     </th>
                     <td class="px-6 py-4 text-right">
                         <Link
-                            v-if="can.update"
+                            v-if="can.edit"
                             :href="`/product/${product.id}/edit`"
                             class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                             >Edit</Link

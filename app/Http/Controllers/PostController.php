@@ -6,13 +6,20 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Models\PostsTag;
 use App\Models\User;
+use App\Services\PostService;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
-class PostController extends Controller
+class PostController extends CoreController
 {
+    public function __construct(PostService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         return Inertia::render('Posts/Index', [
@@ -38,11 +45,11 @@ class PostController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         $data = $request->validate([
             'title' => ['required', 'string'],
-            'slug' => ['required', 'string'],
+            'slug' => ['unique:posts,slug', 'nullable', 'string'],
             'description' => ['required', 'string'],
             'image_name' => ['required', 'string'],
             'is_published' => ['boolean'],
@@ -50,7 +57,7 @@ class PostController extends Controller
             'posts_tag_id' => ['required', 'integer', 'gt:0'],
         ]);
 
-        $post = Post::create($data);
+        $post = $this->service->store($data);
 
         if ($post) {
             return redirect()->route('post.index')->with('msg', 'Successfuly created');
@@ -67,14 +74,13 @@ class PostController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(HttpRequest $request)
     {
-        $postId = $request->input('id');
-
+        $postId = $request->id;
 
         $data = $request->validate([
             'title' => 'required|string',
-            'slug' => 'required|string|unique:posts,slug,' . $postId,
+            'slug' => 'unique:posts,slug,' . $postId . '|nullable|string',
             'description' => 'required|string',
             'image_name' => 'required|string',
             'is_published' => 'boolean',
@@ -82,9 +88,7 @@ class PostController extends Controller
             'posts_tag_id' => 'required|integer'
         ]);
 
-        $post = Post::find($postId);
-
-        $res = $post->update($data);
+        $res = $this->service->update($data, $postId);
 
         if ($res) {
             return redirect()->route('post.index')->with('msg', 'Successfuly updated');

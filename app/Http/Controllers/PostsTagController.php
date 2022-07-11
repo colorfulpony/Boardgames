@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PostsTagResource;
 use App\Models\PostsTag;
+use App\Services\PostsTagService;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
-class PostsTagController extends Controller
+class PostsTagController extends CoreController
 {
+    public function __construct(PostsTagService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         return Inertia::render('PostsTags/Index', [
@@ -33,13 +40,14 @@ class PostsTagController extends Controller
         return Inertia::render('PostsTags/Create');
     }
 
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         $data = $request->validate([
-            'title' => ['required', 'string'],
-            'slug' => ['required', 'string'],
+            'title' => 'required|unique:posts_tags,title|string',
+            'slug' => 'unique:posts_tags,slug|nullable|string',
         ]);
-        $postTag = PostsTag::create($data);
+
+        $postTag = $this->service->store($data);
 
         if($postTag) {
             return redirect()->route('posts-tag.index')->with('msg', 'Successfuly created');
@@ -52,19 +60,16 @@ class PostsTagController extends Controller
         return Inertia::render('PostsTags/Edit', compact('postsTag'));
     }
 
-    public function update(Request $request)
+    public function update(HttpRequest $request)
     {
-        $postsTagId = $request->input('id');
-
+        $postsTagId = $request->id;
 
         $data = $request->validate([
-            'title' => 'string|unique:posts_tags,title,' . $postsTagId,
-            'slug' => 'string|unique:posts_tags,slug,' . $postsTagId,
+            'title' => 'unique:posts_tags,title,' . $postsTagId,
+            'slug' => 'unique:posts_tags,slug,' . $postsTagId . '|nullable|string',
         ]);
 
-        $postsTag = PostsTag::find($postsTagId);
-
-        $res = $postsTag->update($data);
+        $res = $res = $this->service->update($data, $postsTagId);
 
         if($res) {
             return redirect()->route('posts-tag.index')->with('msg', 'Successfuly updated');

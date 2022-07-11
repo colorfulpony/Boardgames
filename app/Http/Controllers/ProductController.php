@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Services\ProductService;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
-class ProductController extends Controller
+class ProductController extends CoreController
 {
+    public function __construct(ProductService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         return Inertia::render('Products/Index', [
@@ -35,7 +42,7 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         $data = $request->validate([
             'name' => 'required|string|unique:products',
@@ -46,7 +53,7 @@ class ProductController extends Controller
             'product_category_id' => ['required', 'integer', 'gt:0'],
         ]);
 
-        $product = Product::create($data);
+        $product = $this->service->store($data);
 
         if ($product) {
             return redirect()->route('product.index')->with('msg', 'Successfuly created');
@@ -62,9 +69,9 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(HttpRequest $request)
     {
-        $productId = $request->input('id');
+        $productId = $request->id;
 
         $data = $request->validate([
             'name' => 'required|string|unique:products,name,' . $productId,
@@ -75,9 +82,7 @@ class ProductController extends Controller
             'product_category_id' => ['required', 'integer', 'gt:0'],
         ]);
 
-        $product = Product::find($productId);
-
-        $res = $product->update($data);
+        $res = $this->service->update($data, $productId);
 
         if ($res) {
             return redirect()->route('product.index')->with('msg', 'Successfuly updated');

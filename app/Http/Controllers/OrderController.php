@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Services\OrderService;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
-class OrderController extends Controller
+class OrderController extends CoreController
 {
+    public function __construct(OrderService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         return Inertia::render('Orders/Index', [
@@ -32,7 +39,7 @@ class OrderController extends Controller
         return Inertia::render('Orders/Create');
     }
 
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
         $data = $request->validate([
             'delivery_adress' => 'required|string',
@@ -42,9 +49,9 @@ class OrderController extends Controller
             'user_id' => ['required', 'integer'],
         ]);
 
-        $post = Order::create($data);
+        $order = $this->service->store($data);
 
-        if ($post) {
+        if ($order) {
             return redirect()->route('order.index')->with('msg', 'Successfuly created');
         }
     }
@@ -57,7 +64,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(HttpRequest $request)
     {
         $orderId = $request->input('id');
 
@@ -69,9 +76,7 @@ class OrderController extends Controller
             'date_of_payment' => 'required|date',
         ]);
 
-        $order = Order::find($orderId);
-
-        $res = $order->update($data);
+        $res = $this->service->update($data, $orderId);
 
         if ($res) {
             return redirect()->route('order.index')->with('msg', 'Successfuly updated');

@@ -7,7 +7,11 @@ use App\Models\Post;
 use App\Models\PostsTag;
 use App\Models\User;
 use App\Services\PostService;
+<<<<<<< HEAD
 use \Illuminate\Http\Request as HttpRequest;
+=======
+use Illuminate\Http\Request as HttpRequest;
+>>>>>>> slugFunction
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;
@@ -77,12 +81,11 @@ class PostController extends CoreController
 
     public function update(HttpRequest $request)
     {
-        $postId = $request->input('id');
-
+        $postId = $request->id;
 
         $data = $request->validate([
             'title' => 'required|string',
-            'slug' => 'required|string|unique:posts,slug,' . $postId,
+            'slug' => 'unique:posts,slug,' . $postId . '|nullable|string',
             'description' => 'required|string',
             'image_name' => 'required|string',
             'is_published' => 'boolean',
@@ -90,9 +93,7 @@ class PostController extends CoreController
             'posts_tag_id' => 'required|integer'
         ]);
 
-        $post = Post::find($postId);
-
-        $res = $post->update($data);
+        $res = $this->service->update($data, $postId);
 
         if ($res) {
             return redirect()->route('post.index')->with('msg', 'Successfuly updated');

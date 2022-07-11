@@ -3,12 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductCategory;
+use App\Services\ProductCategoryService;
+use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 
-class ProductCategoryController extends Controller
+class ProductCategoryController extends CoreController
 {
+    public function __construct(ProductCategoryService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
         return Inertia::render('ProductCategories/Index', [
@@ -32,17 +39,15 @@ class ProductCategoryController extends Controller
         return Inertia::render('ProductCategories/Create');
     }
 
-    public function store(Request $request)
+    public function store(HttpRequest $request)
     {
-        $productCategoryId = $request->input('id');
-
         $data = $request->validate([
-            'title' => 'required|string|unique:product_categories,title,' . $productCategoryId,
-            'slug' => 'required|string|unique:product_categories,slug,' . $productCategoryId,
+            'title' => 'required|string|unique:product_categories,title',
+            'slug' => 'unique:product_categories,slug|nullable|string',
             'description' => 'required|string',
         ]);
 
-        $productCategory = ProductCategory::create($data);
+        $productCategory = $this->service->store($data);
 
         if ($productCategory) {
             return redirect()->route('product_category.index')->with('msg', 'Successfuly created');
@@ -57,19 +62,17 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(HttpRequest $request)
     {
-        $productCategoryId = $request->input('id');
+        $productCategoryId = $request->id;
 
         $data = $request->validate([
             'title' => 'required|string|unique:product_categories,title,' . $productCategoryId,
-            'slug' => 'required|string|unique:product_categories,slug,' . $productCategoryId,
+            'slug' => 'unique:product_categories,slug,' . $productCategoryId . '|nullable|string',
             'description' => 'required|string',
         ]);
 
-        $productCategory = ProductCategory::find($productCategoryId);
-
-        $res = $productCategory->update($data);
+        $res = $this->service->update($data, $productCategoryId);
 
         if ($res) {
             return redirect()->route('product_category.index')->with('msg', 'Successfuly updated');

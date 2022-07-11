@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\CoreService;
+<<<<<<< HEAD
 use App\Services\PostService;
+=======
+>>>>>>> slugFunction
 
 class CoreController extends Controller
 {

@@ -663,18 +663,22 @@ var map = {
 	],
 	"./Orders/Create": [
 		"./resources/js/Pages/Orders/Create.vue",
+		"/js/vendor",
 		"resources_js_Pages_Orders_Create_vue"
 	],
 	"./Orders/Create.vue": [
 		"./resources/js/Pages/Orders/Create.vue",
+		"/js/vendor",
 		"resources_js_Pages_Orders_Create_vue"
 	],
 	"./Orders/Edit": [
 		"./resources/js/Pages/Orders/Edit.vue",
+		"/js/vendor",
 		"resources_js_Pages_Orders_Edit_vue"
 	],
 	"./Orders/Edit.vue": [
 		"./resources/js/Pages/Orders/Edit.vue",
+		"/js/vendor",
 		"resources_js_Pages_Orders_Edit_vue"
 	],
 	"./Orders/Index": [

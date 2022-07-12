@@ -7,11 +7,7 @@ use App\Models\Post;
 use App\Models\PostsTag;
 use App\Models\User;
 use App\Services\PostService;
-<<<<<<< HEAD
-use \Illuminate\Http\Request as HttpRequest;
-=======
 use Illuminate\Http\Request as HttpRequest;
->>>>>>> slugFunction
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\DB;

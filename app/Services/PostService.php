@@ -2,21 +2,15 @@
 
 namespace App\Services;
 
-<<<<<<< HEAD
 use Illuminate\Support\Str;
-
-use App\Models\Post;
-=======
 use App\Models\Post;
 use App\Services\CoreService;
-use Illuminate\Support\Str;
->>>>>>> slugFunction
 
 class PostService extends CoreService
 {
     public function store($data)
     {
-<<<<<<< HEAD
+
         if(!$data['slug']) {
             $title = $data['title'];
             $slug = Str::slug($title);
@@ -24,9 +18,9 @@ class PostService extends CoreService
             $slug = $data['slug'];
             $slug = Str::slug($slug);
         }
-=======
+
         $slug = $this->getSlug($data['slug'], $data['title']);
->>>>>>> slugFunction
+
 
         $data['slug'] = $slug;
 
@@ -34,8 +28,7 @@ class PostService extends CoreService
 
         return $post;
     }
-<<<<<<< HEAD
-=======
+
 
     public function update($data, $postId)
     {
@@ -61,5 +54,5 @@ class PostService extends CoreService
 
         return $slug;
     }
->>>>>>> slugFunction
+
 }

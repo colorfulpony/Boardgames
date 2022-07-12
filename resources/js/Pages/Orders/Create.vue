@@ -1,7 +1,11 @@
 <template>
     <Head>
         <title>Create Order</title>
-        <meta type="description" content="Create Order" head-key="description" />
+        <meta
+            type="description"
+            content="Create Order"
+            head-key="description"
+        />
     </Head>
     <div class="content-center">
         <h1 class="text-4xl font-bold">Create Order</h1>
@@ -12,7 +16,7 @@
             <div class="mb-6">
                 <label
                     for="delivery_adress"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900 "
                     >Delivery Adress</label
                 >
                 <input
@@ -20,7 +24,7 @@
                     name="delivery_adress"
                     type="text"
                     id="delivery_adress"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 <div
                     v-if="form.errors.delivery_adress"
@@ -31,7 +35,7 @@
             <div class="mb-6">
                 <label
                     for="full_cost"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-90"
                     >Full Cost</label
                 >
                 <input
@@ -39,7 +43,7 @@
                     name="full_cost"
                     type="text"
                     id="full_cost"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                 />
                 <div
                     v-if="form.errors.full_cost"
@@ -50,15 +54,18 @@
             <div class="mb-6">
                 <label
                     for="date_of_order"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Date of Order</label
                 >
-                <input
-                    v-model="form.date_of_order"
+                <Datepicker
                     name="date_of_order"
-                    type="text"
                     id="date_of_order"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    v-model="form.date_of_order"
+                    :flow="flow"
+                    modelType="yyyy-MM-dd HH:mm:ss"
+                    :format="format"
+                    autoApply
                 />
                 <div
                     v-if="form.errors.date_of_order"
@@ -69,15 +76,18 @@
             <div class="mb-6">
                 <label
                     for="date_of_payment"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-90"
                     >Date of Payment</label
                 >
-                <input
-                    v-model="form.date_of_payment"
+                <Datepicker
                     name="date_of_payment"
-                    type="text"
                     id="date_of_payment"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    v-model="form.date_of_payment"
+                    :flow="flow"
+                    modelType="yyyy-MM-dd HH:mm:ss"
+                    :format="format"
+                    autoApply
                 />
                 <div
                     v-if="form.errors.date_of_payment"
@@ -88,7 +98,7 @@
             <button
                 :disabled="form.processing"
                 type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
                 Submit
             </button>
@@ -99,13 +109,29 @@
 <script>
 export default {
     mounted() {
-        (this.form.user_id = this.$page.props.auth.user.id)
+        this.form.user_id = this.$page.props.auth.user.id;
     },
 };
 </script>
 
 <script setup>
+import { ref } from "vue";
+import Datepicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
 import { useForm } from "@inertiajs/inertia-vue3";
+
+const flow = ref(["year", "month", "calendar"]);
+
+let format = (date) => {
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+};
 
 let form = useForm({
     delivery_adress: "",

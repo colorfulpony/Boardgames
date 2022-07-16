@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductCategory\ProductCategoryStoreRequest;
+use App\Http\Requests\ProductCategory\ProductCategoryUpdateRequest;
 use App\Models\ProductCategory;
 use App\Services\ProductCategoryService;
 use Illuminate\Http\Request as HttpRequest;
@@ -39,13 +41,9 @@ class ProductCategoryController extends CoreController
         return Inertia::render('ProductCategories/Create');
     }
 
-    public function store(HttpRequest $request)
+    public function store(ProductCategoryStoreRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|string|unique:product_categories,title',
-            'slug' => 'unique:product_categories,slug|nullable|string',
-            'description' => 'required|string',
-        ]);
+        $data = $request->validated();
 
         $productCategory = $this->service->store($data);
 
@@ -62,15 +60,11 @@ class ProductCategoryController extends CoreController
         ]);
     }
 
-    public function update(HttpRequest $request)
+    public function update(ProductCategoryUpdateRequest $request)
     {
         $productCategoryId = $request->id;
 
-        $data = $request->validate([
-            'title' => 'required|string|unique:product_categories,title,' . $productCategoryId,
-            'slug' => 'unique:product_categories,slug,' . $productCategoryId . '|nullable|string',
-            'description' => 'required|string',
-        ]);
+        $data = $request->validated();
 
         $res = $this->service->update($data, $productCategoryId);
 

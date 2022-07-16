@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostsTag\PostsTagStoreRequest;
+use App\Http\Requests\PostsTag\PostsTagUpdateRequest;
 use App\Http\Resources\PostsTagResource;
 use App\Models\PostsTag;
 use App\Services\PostsTagService;
@@ -40,12 +42,9 @@ class PostsTagController extends CoreController
         return Inertia::render('PostsTags/Create');
     }
 
-    public function store(HttpRequest $request)
+    public function store(PostsTagStoreRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required|unique:posts_tags,title|string',
-            'slug' => 'unique:posts_tags,slug|nullable|string',
-        ]);
+        $data = $request->validated();
 
         $postTag = $this->service->store($data);
 
@@ -60,16 +59,13 @@ class PostsTagController extends CoreController
         return Inertia::render('PostsTags/Edit', compact('postsTag'));
     }
 
-    public function update(HttpRequest $request)
+    public function update(PostsTagUpdateRequest $request)
     {
         $postsTagId = $request->id;
 
-        $data = $request->validate([
-            'title' => 'unique:posts_tags,title,' . $postsTagId,
-            'slug' => 'unique:posts_tags,slug,' . $postsTagId . '|nullable|string',
-        ]);
+        $data = $request->validated();
 
-        $res = $res = $this->service->update($data, $postsTagId);
+        $res = $this->service->update($data, $postsTagId);
 
         if($res) {
             return redirect()->route('posts-tag.index')->with('msg', 'Successfuly updated');

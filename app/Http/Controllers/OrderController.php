@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\OrderUpdateRequest;
 use App\Models\Order;
 use App\Services\OrderService;
 use Illuminate\Http\Request as HttpRequest;
@@ -39,15 +40,9 @@ class OrderController extends CoreController
         return Inertia::render('Orders/Create');
     }
 
-    public function store(HttpRequest $request)
+    public function store(OrderUpdateRequest $request)
     {
-        $data = $request->validate([
-            'delivery_adress' => 'required|string',
-            'full_cost' => 'required|integer',
-            'date_of_order' => 'required|date',
-            'date_of_payment' => 'required|date',
-            'user_id' => ['required', 'integer'],
-        ]);
+        $data = $request->validated();
 
         $order = $this->service->store($data);
 
@@ -64,17 +59,11 @@ class OrderController extends CoreController
         ]);
     }
 
-    public function update(HttpRequest $request)
+    public function update(OrderUpdateRequest $request)
     {
         $orderId = $request->input('id');
 
-
-        $data = $request->validate([
-            'delivery_adress' => 'required|string',
-            'full_cost' => 'required|integer',
-            'date_of_order' => 'required|date',
-            'date_of_payment' => 'required|date',
-        ]);
+        $data = $request->validated();
 
         $res = $this->service->update($data, $orderId);
 

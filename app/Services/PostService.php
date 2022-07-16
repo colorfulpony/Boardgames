@@ -5,24 +5,18 @@ namespace App\Services;
 use Illuminate\Support\Str;
 use App\Models\Post;
 use App\Services\CoreService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\File;
 
 class PostService extends CoreService
 {
     public function store($data)
     {
+        $image_name = $data['title'] . '_' . $data['image']->hashName();
 
-        if(!$data['slug']) {
-            $title = $data['title'];
-            $slug = Str::slug($title);
-        } else {
-            $slug = $data['slug'];
-            $slug = Str::slug($slug);
-        }
+        $saveImage = $data['image']->storeAs('public/images/post/', $image_name);
 
-        $slug = $this->getSlug($data['slug'], $data['title']);
-
-
-        $data['slug'] = $slug;
+        $data['image'] = $image_name;
 
         $post = Post::create($data);
 
@@ -32,27 +26,18 @@ class PostService extends CoreService
 
     public function update($data, $postId)
     {
-        $slug = $this->getSlug($data['slug'], $data['title']);
-
-        $data['slug'] = $slug;
-
         $post = Post::find($postId);
+
+        File::delete(public_path() . '/storage/images/post/' . $post->image);
+
+        $image_name = $data['title'] . '_' . $data['image']->hashName();
+
+        $saveImage = $data['image']->storeAs('public/images/post/', $image_name);
+
+        $data['image'] = $image_name;
 
         $res = $post->update($data);
 
         return $res;
     }
-
-    protected function getSlug($slug, $title)
-    {
-        if(!$slug) {
-            $title = $title;
-            $slug = Str::slug($title);
-        } else {
-            $slug = Str::slug($slug);
-        }
-
-        return $slug;
-    }
-
 }

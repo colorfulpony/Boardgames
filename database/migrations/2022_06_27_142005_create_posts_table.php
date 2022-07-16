@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('slug')->unique();
 
             $table->text('description');
-            $table->string('image_name');
+            $table->text('image');
 
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();

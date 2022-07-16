@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\PostResource;
+use App\Http\Requests\Post\PostStoreRequest;
+use App\Http\Requests\Post\PostUpdateRequest;
 use App\Models\Post;
 use App\Models\PostsTag;
-use App\Models\User;
 use App\Services\PostService;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -46,17 +44,9 @@ class PostController extends CoreController
         ]);
     }
 
-    public function store(HttpRequest $request)
+    public function store(PostStoreRequest $request)
     {
-        $data = $request->validate([
-            'title' => ['required', 'string'],
-            'slug' => ['unique:posts,slug', 'nullable', 'string'],
-            'description' => ['required', 'string'],
-            'image_name' => ['required', 'string'],
-            'is_published' => ['boolean'],
-            'user_id' => ['required', 'integer'],
-            'posts_tag_id' => ['required', 'integer', 'gt:0'],
-        ]);
+        $data = $request->validated();
 
         $post = $this->service->store($data);
 
@@ -71,23 +61,17 @@ class PostController extends CoreController
         return Inertia::render('Posts/Edit', [
             'post' => $post,
 
+            'image' => asset('storage/images/post/' . $post->image),
+
             'tagsTitles' => collect(PostsTag::query()->select(['id', 'title'])->get())
         ]);
     }
 
-    public function update(HttpRequest $request)
+    public function update(PostUpdateRequest $request)
     {
         $postId = $request->id;
 
-        $data = $request->validate([
-            'title' => 'required|string',
-            'slug' => 'unique:posts,slug,' . $postId . '|nullable|string',
-            'description' => 'required|string',
-            'image_name' => 'required|string',
-            'is_published' => 'boolean',
-            'user_id' => 'required|integer',
-            'posts_tag_id' => 'required|integer'
-        ]);
+        $data = $request->validated();
 
         $res = $this->service->update($data, $postId);
 

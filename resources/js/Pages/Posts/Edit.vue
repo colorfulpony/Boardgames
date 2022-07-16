@@ -68,20 +68,24 @@
             </div>
             <div class="mb-6">
                 <label
-                    for="image_name"
+                    for="image"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                    >Image Name</label
+                    >Image</label
                 >
                 <input
-                    v-model="form.image_name"
-                    name="image_name"
-                    type="text"
-                    id="image_name"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="file"
+                    @change="previewImage"
+                    @input="form.image = $event.target.files[0]"
+                    class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                />
+                <img
+                    v-if="url || this.image"
+                    :src="url || this.image"
+                    class="w-full mt-4 h-80"
                 />
                 <div
-                    v-if="form.errors.image_name"
-                    v-text="form.errors.image_name"
+                    v-if="form.errors.image"
+                    v-text="form.errors.image"
                     class="text-red-500 text-xs mt-1"
                 ></div>
             </div>
@@ -145,6 +149,12 @@
 <script>
 import { isProxy, toRaw } from "vue";
 export default {
+    data() {
+        return {
+            url: null,
+        };
+    },
+
     mounted() {
         this.checkIsPublished();
     },
@@ -160,6 +170,11 @@ export default {
             } else {
                 this.form.is_published = false;
             }
+        },
+
+        previewImage(e) {
+            const file = e.target.files[0];
+            this.url = URL.createObjectURL(file);
         },
     },
 
@@ -181,6 +196,7 @@ import { useForm } from "@inertiajs/inertia-vue3";
 let props = defineProps({
     post: Object,
     tagsTitles: Object,
+    image: String,
 });
 
 let form = useForm(props.post);

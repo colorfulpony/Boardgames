@@ -11,6 +11,8 @@ class OrderService extends CoreService
 {
     public function store($data)
     {
+        $data['user_id'] = 1;
+
         $order = Order::create($data);
 
         return $order;
@@ -18,22 +20,12 @@ class OrderService extends CoreService
 
     public function update($data, $orderId)
     {
+        $data['user_id'] = 1;
+
         $order = Order::find($orderId);
 
         $res = $order->update($data);
 
         return $res;
-    }
-
-    protected function getSlug($slug, $title)
-    {
-        if(!$slug) {
-            $title = $title;
-            $slug = Str::slug($title);
-        } else {
-            $slug = Str::slug($slug);
-        }
-
-        return $slug;
     }
 }

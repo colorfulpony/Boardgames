@@ -90,6 +90,25 @@
                 ></div>
             </div>
             <div class="mb-6">
+                <label
+                    for="image"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Image</label
+                >
+                <input
+                    type="file"
+                    @change="previewImage"
+                    @input="form.image = $event.target.files[0]"
+                    class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                />
+                <img v-if="url" :src="url" class="w-full mt-4 h-80" />
+                <div
+                    v-if="form.errors.image"
+                    v-text="form.errors.image"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
                 <div class="flex items-center mb-4">
                     <input
                         v-model="form.available"
@@ -120,7 +139,9 @@
                     id="tag"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 >
-                    <option disabled selected value="0">Choose Product Category</option>
+                    <option disabled selected value="0">
+                        Choose Product Category
+                    </option>
                     <option
                         v-for="productCategory in productCategoriesRaw"
                         :key="productCategory.id"
@@ -149,6 +170,12 @@
 <script>
 import { isProxy, toRaw } from "vue";
 export default {
+    data() {
+        return {
+            url: null,
+        };
+    },
+    
     mounted() {
         this.form.available = false;
     },
@@ -162,6 +189,13 @@ export default {
             return rawObject;
         },
     },
+
+    methods: {
+        previewImage(e) {
+            const file = e.target.files[0];
+            this.url = URL.createObjectURL(file);
+        },
+    },
 };
 </script>
 
@@ -173,13 +207,14 @@ let form = useForm({
     price: "",
     sale: "",
     description: "",
+    image: null,
     available: "",
-    product_category_id: 0
+    product_category_id: 0,
 });
 
 let props = defineProps({
-    productCategories: Object
-})
+    productCategories: Object,
+});
 
 let submit = () => {
     form.post("/product/create");

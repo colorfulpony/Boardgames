@@ -87,6 +87,31 @@
                 ></div>
             </div>
             <div class="mb-6">
+                <label
+                    for="image"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    >Image</label
+                >
+                <input
+                    type="file"
+                    accept="image/*"
+                    @change="previewImage"
+                    @input="form.image = $event.target.files[0]"
+                    @value="this.imageName"
+                    class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+                />
+                <img
+                    v-if="url || this.image"
+                    :src="url || this.image"
+                    class="w-full mt-4 h-80"
+                />
+                <div
+                    v-if="form.errors.image"
+                    v-text="form.errors.image"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
                 <div class="flex items-center mb-4">
                     <input
                         v-model="form.available"
@@ -148,6 +173,12 @@
 <script>
 import { isProxy, toRaw } from "vue";
 export default {
+    data() {
+        return {
+            url: null,
+        };
+    },
+
     mounted() {
         this.checkIsPublished();
     },
@@ -163,6 +194,11 @@ export default {
             } else {
                 this.form.available = false;
             }
+        },
+
+        previewImage(e) {
+            const file = e.target.files[0];
+            this.url = URL.createObjectURL(file);
         },
     },
 
@@ -184,6 +220,8 @@ import { useForm } from "@inertiajs/inertia-vue3";
 let props = defineProps({
     product: Object,
     productCategories: Object,
+    image: String,
+    imageName: String,
 });
 
 let form = useForm(props.product);

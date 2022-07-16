@@ -17,6 +17,7 @@ return new class extends Migration
             $table->bigIncrements('id');
 
             $table->string('name');
+            $table->text('image');
             $table->unsignedBigInteger('product_category_id')->nullable();
             $table->bigInteger('price')->unsigned();
             $table->boolean('available')->default(false);

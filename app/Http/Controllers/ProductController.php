@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\ProductService;
@@ -42,16 +44,9 @@ class ProductController extends CoreController
         ]);
     }
 
-    public function store(HttpRequest $request)
+    public function store(ProductStoreRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string|unique:products',
-            'price' => 'required|integer',
-            'sale' => 'required|integer',
-            'description' => 'required|string',
-            'available' => 'boolean',
-            'product_category_id' => ['required', 'integer', 'gt:0'],
-        ]);
+        $data = $request->validated();
 
         $product = $this->service->store($data);
 
@@ -65,22 +60,17 @@ class ProductController extends CoreController
         $product = Product::findOrFail($productId);
         return Inertia::render('Products/Edit', [
             'product' => $product,
+            'image' => asset('storage/images/product/' . $product->image),
+            'imageName' => $product->image,
             'productCategories' => collect(ProductCategory::query()->select(['id', 'title'])->get())
         ]);
     }
 
-    public function update(HttpRequest $request)
+    public function update(ProductUpdateRequest $request)
     {
         $productId = $request->id;
 
-        $data = $request->validate([
-            'name' => 'required|string|unique:products,name,' . $productId,
-            'price' => 'required|integer',
-            'sale' => 'required|integer',
-            'description' => 'required|string',
-            'available' => 'boolean',
-            'product_category_id' => ['required', 'integer', 'gt:0'],
-        ]);
+        $data = $request->validated();
 
         $res = $this->service->update($data, $productId);
 

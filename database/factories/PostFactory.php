@@ -24,7 +24,7 @@ class PostFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => $this->faker->realText(),
-            'image_name' => $this->faker->word(),
+            'image' => $this->faker->word(),
             'is_published' => $isPublished ,
             'posts_tag_id' => $this->faker->numberBetween(1, 10),
             'published_at' => $isPublished ? $this->faker->dateTimeBetween('-2 months', '-1 days') : null,

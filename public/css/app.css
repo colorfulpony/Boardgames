@@ -613,6 +613,9 @@ video {
 .h-4 {
   height: 1rem;
 }
+.h-full {
+  height: 100%;
+}
 .w-full {
   width: 100%;
 }

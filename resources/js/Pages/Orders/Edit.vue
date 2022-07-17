@@ -3,13 +3,16 @@
         <title>Edit Order</title>
         <meta type="description" content="Edit Order" head-key="description" />
     </Head>
+    <div class="content-center">
+        <h1 class="text-4xl font-bold">Edit Order</h1>
+    </div>
     <div class="h-screen content-center">
         <form @submit.prevent="submit" class="mt-8 max-w-md mx-auto">
             <input type="hidden" v-model="form.id" name="id" />
             <div class="mb-6">
                 <label
                     for="delivery_adress"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Delivery Adress</label
                 >
                 <input
@@ -17,7 +20,7 @@
                     name="delivery_adress"
                     type="text"
                     id="delivery_adress"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.delivery_adress"
@@ -28,7 +31,7 @@
             <div class="mb-6">
                 <label
                     for="full_cost"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Full Cost</label
                 >
                 <input
@@ -36,7 +39,7 @@
                     name="full_cost"
                     type="text"
                     id="full_cost"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.full_cost"
@@ -47,13 +50,13 @@
             <div class="mb-6">
                 <label
                     for="date_of_order"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Date of Order</label
                 >
                 <Datepicker
                     name="date_of_order"
                     id="date_of_order"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     v-model="form.date_of_order"
                     :flow="flow"
                     modelType="yyyy-MM-dd HH:mm:ss"
@@ -69,13 +72,13 @@
             <div class="mb-6">
                 <label
                     for="date_of_payment"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Date of Payment</label
                 >
                 <Datepicker
                     name="date_of_payment"
                     id="date_of_payment"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     v-model="form.date_of_payment"
                     :flow="flow"
                     modelType="yyyy-MM-dd HH:mm:ss"
@@ -91,15 +94,13 @@
             <button
                 :disabled="form.processing"
                 type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
                 Submit
             </button>
         </form>
     </div>
 </template>
-
-
 
 <script setup>
 import { ref } from "vue";

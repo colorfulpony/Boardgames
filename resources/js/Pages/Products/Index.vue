@@ -29,10 +29,10 @@
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
         <table
-            class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+            class="w-full text-sm text-left text-gray-500 "
         >
             <thead
-                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                class="text-xs text-gray-700 uppercase bg-gray-50 "
             >
                 <tr>
                     <th scope="col" class="px-6 py-3">Name</th>
@@ -46,23 +46,23 @@
             <tbody v-for="product in products.data" :key="product.id">
                 <tr
                     :class="product.available ? 'bg-gray-200' : ''"
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                    class="bg-white border-b "
                 >
                     <th
                         scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                        class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap"
                     >
                         {{ product.name }}
                     </th>
                     <th
                         scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                        class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap"
                     >
                         {{ product.price }}
                     </th>
                     <th
                         scope="row"
-                        class="px-6 w-24 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+                        class="px-6 w-24 py-4 font-medium text-gray-900  whitespace-nowrap"
                     >
                         {{ product.sale }}
                     </th>
@@ -70,7 +70,7 @@
                         <Link
                             v-if="can.edit"
                             :href="`/product/${product.id}/edit`"
-                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                            class="font-medium text-blue-600  hover:underline"
                             >Edit</Link
                         >
                     </td>

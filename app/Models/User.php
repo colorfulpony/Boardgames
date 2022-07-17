@@ -52,8 +52,9 @@ class User extends Authenticatable
     {
         return [
             'items_view' => $this->role == 1 || $this->role == 2,
-            'items_create' => $this->role == 1,
-            'items_update' => $this->role == 1,
+            'items_create' => $this->role == 1 || $this->role == 2,
+            'items_update' => $this->role == 1 || $this->role == 2,
+            'items_delete' => $this->role == 1,
         ];
     }
 

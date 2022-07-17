@@ -133,11 +133,11 @@ var _hoisted_7 = {
   "class": "relative overflow-x-auto shadow-md sm:rounded-lg mt-6"
 };
 var _hoisted_8 = {
-  "class": "w-full text-sm text-left text-gray-500 dark:text-gray-400"
+  "class": "w-full text-sm text-left text-gray-500"
 };
 
 var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", {
-  "class": "text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+  "class": "text-xs text-gray-700 uppercase bg-gray-50"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", {
   scope: "col",
   "class": "px-6 py-3"
@@ -157,19 +157,19 @@ var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementV
 );
 
 var _hoisted_10 = {
-  "class": "bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+  "class": "bg-white border-b"
 };
 var _hoisted_11 = {
   scope: "row",
-  "class": "px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
 };
 var _hoisted_12 = {
   scope: "row",
-  "class": "px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+  "class": "px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
 };
 var _hoisted_13 = {
   scope: "row",
-  "class": "px-6 w-24 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
+  "class": "px-6 w-24 py-4 font-medium text-gray-900 whitespace-nowrap"
 };
 var _hoisted_14 = {
   "class": "px-6 py-4 text-right"
@@ -224,7 +224,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", _hoisted_14, [$props.can.edit ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
       key: 0,
       href: "/product_category/".concat(productCategory.id, "/edit"),
-      "class": "font-medium text-blue-600 dark:text-blue-500 hover:underline"
+      "class": "font-medium text-blue-600 hover:underline"
     }, {
       "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
         return [_hoisted_15];

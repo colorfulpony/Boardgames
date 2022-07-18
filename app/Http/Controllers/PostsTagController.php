@@ -26,12 +26,16 @@ class PostsTagController extends CoreController
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('title', 'like', "%{$search}%");
             })
-            ->select(['id', 'slug', 'title'])
+            ->withTrashed()
+            ->orderBy('deleted_at', 'asc')
+            ->select(['id', 'slug', 'title', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [
                 'create' => Auth::user()->can('create', PostsTag::class),
                 'edit' => Auth::user()->can('update', PostsTag::class),
+                'delete' => Auth::user()->can('delete', PostsTag::class),
+                'restore' => Auth::user()->can('restore', PostsTag::class),
             ],
             'filters' => Request::only(['search']),
         ]);
@@ -69,6 +73,24 @@ class PostsTagController extends CoreController
 
         if($res) {
             return redirect()->route('posts-tag.index')->with('msg', 'Successfuly updated');
+        }
+    }
+
+    public function destroy($postsTagId)
+    {
+        $postsTagDelete = PostsTag::find($postsTagId)->delete();
+
+        if ($postsTagDelete) {
+            return redirect()->route('posts-tag.index')->with('msg', 'Successfuly deleted');
+        }
+    }
+
+    public function restore($postsTagId)
+    {
+        $postsTagRestore = PostsTag::withTrashed()->find($postsTagId)->restore();
+
+        if ($postsTagRestore) {
+            return redirect()->route('posts-tag.index')->with('msg', 'Successfuly restored');
         }
     }
 }

@@ -25,12 +25,16 @@ class ProductCategoryController extends CoreController
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('title', 'like', "%{$search}%");
             })
-            ->select(['id', 'slug', 'title', 'description'])
+            ->withTrashed()
+            ->orderBy('deleted_at', 'asc')
+            ->select(['id', 'slug', 'title', 'description', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [
                 'create' => Auth::user()->can('create', ProductCategory::class),
                 'edit' => Auth::user()->can('update', ProductCategory::class),
+                'delete' => Auth::user()->can('delete', ProductCategory::class),
+                'restore' => Auth::user()->can('restore', ProductCategory::class),
             ],
             'filters' => Request::only(['search']),
         ]);
@@ -70,6 +74,24 @@ class ProductCategoryController extends CoreController
 
         if ($res) {
             return redirect()->route('product_category.index')->with('msg', 'Successfuly updated');
+        }
+    }
+
+    public function destroy($productCategoryId)
+    {
+        $productCategoryDelete = ProductCategory::withTrashed()->find($productCategoryId)->delete();
+
+        if ($productCategoryDelete) {
+            return redirect()->route('product_category.index')->with('msg', 'Successfuly deleted');
+        }
+    }
+
+    public function restore($productCategoryId)
+    {
+        $productRestore = ProductCategory::withTrashed()->find($productCategoryId)->restore();
+
+        if ($productRestore) {
+            return redirect()->route('product_category.index')->with('msg', 'Successfuly restored');
         }
     }
 }

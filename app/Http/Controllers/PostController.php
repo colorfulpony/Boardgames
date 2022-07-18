@@ -26,12 +26,16 @@ class PostController extends CoreController
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('title', 'like', "%{$search}%");
             })
-            ->select(['id', 'slug', 'title', 'description'])
+            ->withTrashed()
+            ->orderBy('deleted_at', 'asc')
+            ->select(['id', 'slug', 'title', 'description', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [
                 'create' => Auth::user()->can('create', Post::class),
                 'edit' => Auth::user()->can('update', Post::class),
+                'delete' => Auth::user()->can('delete', Post::class),
+                'restore' => Auth::user()->can('restore', Post::class),
             ],
             'filters' => Request::only(['search']),
         ]);
@@ -77,6 +81,24 @@ class PostController extends CoreController
 
         if ($res) {
             return redirect()->route('post.index')->with('msg', 'Successfuly updated');
+        }
+    }
+
+    public function destroy($postId)
+    {
+        $postDelete = Post::find($postId)->delete();
+
+        if ($postDelete) {
+            return redirect()->route('post.index')->with('msg', 'Successfuly deleted');
+        }
+    }
+
+    public function restore($postId)
+    {
+        $postRestore = Post::withTrashed()->find($postId)->restore();
+
+        if ($postRestore) {
+            return redirect()->route('post.index')->with('msg', 'Successfuly restored');
         }
     }
 }

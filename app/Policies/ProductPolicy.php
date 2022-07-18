@@ -47,4 +47,14 @@ class ProductPolicy
     {
         return $user->permissions['items_update'];
     }
+
+    public function delete(User $user)
+    {
+        return $user->permissions['items_delete'];
+    }
+
+    public function restore(User $user)
+    {
+        return $user->permissions['items_restore'];
+    }
 }

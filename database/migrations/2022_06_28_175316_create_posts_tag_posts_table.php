@@ -26,6 +26,8 @@ return new class extends Migration
                   ->references('id')
                   ->on('posts')
                   ->onDelete('cascade');
+
+            $table->softDeletes();
         });
     }
 

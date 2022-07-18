@@ -26,12 +26,16 @@ class ProductController extends CoreController
             ->when(Request::input('search'), function ($query, $search) {
                 $query->where('name', 'like', "%{$search}%");
             })
-            ->select(['id', 'name', 'price', 'sale', 'available'])
+            ->withTrashed()
+            ->orderBy('deleted_at', 'asc')
+            ->select(['id', 'name', 'price', 'sale', 'available', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [
                 'create' => Auth::user()->can('create', Product::class),
                 'edit' => Auth::user()->can('update', Product::class),
+                'delete' => Auth::user()->can('delete', Product::class),
+                'restore' => Auth::user()->can('restore', Product::class),
             ],
             'filters' => Request::only(['search']),
         ]);
@@ -76,6 +80,24 @@ class ProductController extends CoreController
 
         if ($res) {
             return redirect()->route('product.index')->with('msg', 'Successfuly updated');
+        }
+    }
+
+    public function destroy($productId)
+    {
+        $productDelete = Product::find($productId)->delete();
+
+        if ($productDelete) {
+            return redirect()->route('product.index')->with('msg', 'Successfuly deleted');
+        }
+    }
+
+    public function restore($productId)
+    {
+        $productRestore = Product::withTrashed()->find($productId)->restore();
+
+        if ($productRestore) {
+            return redirect()->route('product.index')->with('msg', 'Successfuly restored');
         }
     }
 }

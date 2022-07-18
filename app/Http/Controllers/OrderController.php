@@ -24,12 +24,16 @@ class OrderController extends CoreController
                 ->when(Request::input('search'), function ($query, $search) {
                     $query->where('delivery_adress', 'like', "%{$search}%");
                 })
-                ->select(['id', 'delivery_adress', 'full_cost', 'date_of_order'])
+                ->withTrashed()
+                ->orderBy('deleted_at', 'asc')
+                ->select(['id', 'delivery_adress', 'full_cost', 'date_of_order', 'deleted_at'])
                 ->paginate(10)
                 ->withQueryString(),
             'can' => [
                 'create' => Auth::user()->can('create', Order::class),
                 'edit' => Auth::user()->can('update', Order::class),
+                'delete' => Auth::user()->can('delete', Order::class),
+                'restore' => Auth::user()->can('restore', Order::class),
             ],
             'filters' => Request::only(['search']),
         ]);
@@ -69,6 +73,24 @@ class OrderController extends CoreController
 
         if ($res) {
             return redirect()->route('order.index')->with('msg', 'Successfuly updated');
+        }
+    }
+
+    public function destroy($orderId)
+    {
+        $orderDelete = Order::find($orderId)->delete();
+
+        if ($orderDelete) {
+            return redirect()->route('order.index')->with('msg', 'Successfuly deleted');
+        }
+    }
+
+    public function restore($orderId)
+    {
+        $orderRestore = Order::withTrashed()->find($orderId)->restore();
+
+        if ($orderRestore) {
+            return redirect()->route('order.index')->with('msg', 'Successfuly restored');
         }
     }
 }

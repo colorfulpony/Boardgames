@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -55,6 +56,7 @@ class User extends Authenticatable
             'items_create' => $this->role == 1 || $this->role == 2,
             'items_update' => $this->role == 1 || $this->role == 2,
             'items_delete' => $this->role == 1,
+            'items_restore' => $this->role == 1 || $this->role == 2,
         ];
     }
 

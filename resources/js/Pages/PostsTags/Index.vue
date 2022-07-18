@@ -27,12 +27,8 @@
         </div>
     </div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-6">
-        <table
-            class="w-full text-sm text-left text-gray-500 "
-        >
-            <thead
-                class="text-xs text-gray-700 uppercase bg-gray-50 "
-            >
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">Title</th>
                     <th scope="col" class="px-6 py-3">Slug</th>
@@ -43,27 +39,44 @@
             </thead>
             <tbody v-for="tag in tags.data" :key="tag.id">
                 <tr
-                    class="bg-white border-b "
+                    :class="tag.deleted_at ? 'bg-gray-300' : ''"
+                    class="bg-white border-b"
                 >
                     <th
                         scope="row"
-                        class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
                         {{ tag.title }}
                     </th>
                     <th
                         scope="row"
-                        class="px-6 py-4 font-medium text-gray-900  whitespace-nowrap"
+                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
                         {{ tag.slug }}
                     </th>
-                    <td class="px-6 py-4 text-right">
+                    <td class="">
                         <Link
                             v-if="can.edit"
                             :href="`/posts-tag/${tag.id}/edit`"
-                            class="font-medium text-blue-600  hover:underline"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
                             >Edit</Link
                         >
+                    </td>
+                    <td class="">
+                        <button
+                            v-if="can.delete && !tag.deleted_at"
+                            @click="destroy(tag.id)"
+                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            v-if="can.restore && tag.deleted_at"
+                            @click="restore(tag.id)"
+                            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                        >
+                            Restore
+                        </button>
                     </td>
                 </tr>
             </tbody>
@@ -83,12 +96,12 @@ import debounce from "lodash/debounce";
 let props = defineProps({
     tags: Object,
     filters: Object,
-    can: Object
+    can: Object,
 });
 
 let search = ref(props.filters.search);
 
-console.log(props.can)
+console.log(props.can);
 
 watch(
     search,
@@ -103,4 +116,16 @@ watch(
         );
     }, 300)
 );
+
+const destroy = (id) => {
+    if (confirm("Are you sure?")) {
+        Inertia.delete(route("posts-tag.destroy", id));
+    }
+};
+
+const restore = (id) => {
+    if (confirm("Are you sure?")) {
+        Inertia.get(route("posts-tag.restore", id));
+    }
+};
 </script>

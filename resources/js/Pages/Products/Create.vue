@@ -16,7 +16,7 @@
             <div class="mb-6">
                 <label
                     for="name"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Name</label
                 >
                 <input
@@ -24,7 +24,7 @@
                     name="name"
                     type="text"
                     id="name"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.name"
@@ -34,8 +34,27 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="amount"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Amount</label
+                >
+                <input
+                    v-model="form.amount"
+                    name="amount"
+                    type="text"
+                    id="amount"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <div
+                    v-if="form.errors.amount"
+                    v-text="form.errors.amount"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="price"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Price</label
                 >
                 <input
@@ -43,7 +62,7 @@
                     name="price"
                     type="text"
                     id="price"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.price"
@@ -54,7 +73,7 @@
             <div class="mb-6">
                 <label
                     for="sale"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Sale</label
                 >
                 <input
@@ -62,7 +81,7 @@
                     name="sale"
                     type="text"
                     id="sale"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.sale"
@@ -72,8 +91,28 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="real_price"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Price With Sale</label
+                >
+                <input
+                    disabled
+                    v-model="form.real_price"
+                    name="real_price"
+                    type="text"
+                    id="real_price"
+                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <div
+                    v-if="form.errors.real_price"
+                    v-text="form.errors.real_price"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="description"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Description</label
                 >
                 <input
@@ -81,7 +120,7 @@
                     name="description"
                     type="text"
                     id="description"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 />
                 <div
                     v-if="form.errors.description"
@@ -92,7 +131,7 @@
             <div class="mb-6">
                 <label
                     for="image"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Image</label
                 >
                 <input
@@ -114,11 +153,11 @@
                         v-model="form.available"
                         id="default-checkbox"
                         type="checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500"
                     />
                     <label
                         for="default-checkbox"
-                        class="ml-2 text-sm font-medium text-gray-900 "
+                        class="ml-2 text-sm font-medium text-gray-900"
                         >Available</label
                     >
                 </div>
@@ -131,13 +170,13 @@
             <div class="mb-6">
                 <label
                     for="tag"
-                    class="block mb-2 text-sm font-medium text-gray-900 "
+                    class="block mb-2 text-sm font-medium text-gray-900"
                     >Select tag</label
                 >
                 <select
                     v-model="form.product_category_id"
                     id="tag"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                 >
                     <option disabled selected value="0">
                         Choose Product Category
@@ -159,7 +198,7 @@
             <button
                 :disabled="form.processing"
                 type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center "
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
             >
                 Submit
             </button>
@@ -177,7 +216,23 @@ export default {
     },
 
     mounted() {
+        this.checkRealPrice(this.form.price, this.form.sale);
+
         this.form.available = false;
+        if (this.form.amount > 0) {
+            this.form.available = true;
+        } else {
+            this.form.available = false;
+        }
+    },
+
+    updated() {
+        this.checkRealPrice(this.form.price, this.form.sale);
+        if (this.form.amount > 0) {
+            this.form.available = true;
+        } else {
+            this.form.available = false;
+        }
     },
 
     computed: {
@@ -195,6 +250,10 @@ export default {
             const file = e.target.files[0];
             this.url = URL.createObjectURL(file);
         },
+
+        checkRealPrice(price, sale) {
+            this.form.real_price = price - sale;
+        },
     },
 };
 </script>
@@ -204,8 +263,10 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 let form = useForm({
     name: "",
-    price: "",
-    sale: "",
+    amount: 0,
+    price: 0,
+    sale: 0,
+    real_price: 0,
     description: "",
     image: null,
     available: "",

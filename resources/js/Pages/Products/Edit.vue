@@ -34,6 +34,25 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="amount"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Amount</label
+                >
+                <input
+                    v-model="form.amount"
+                    name="amount"
+                    type="text"
+                    id="amount"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <div
+                    v-if="form.errors.amount"
+                    v-text="form.errors.amount"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="price"
                     class="block mb-2 text-sm font-medium text-gray-900"
                     >Price</label
@@ -72,6 +91,26 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="real_price"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Price With Sale</label
+                >
+                <input
+                    disabled
+                    v-model="form.real_price"
+                    name="real_price"
+                    type="text"
+                    id="real_price"
+                    class="bg-gray-300 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                />
+                <div
+                    v-if="form.errors.real_price"
+                    v-text="form.errors.real_price"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="description"
                     class="block mb-2 text-sm font-medium text-gray-900"
                     >Description</label
@@ -100,7 +139,7 @@
                     accept="image/*"
                     @change="previewImage"
                     @input="form.image = $event.target.files[0]"
-                    @value="this.imageName"
+                    @value="this.form.image"
                     class="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
                 />
                 <img
@@ -183,15 +222,27 @@ export default {
     },
 
     mounted() {
-        this.checkIsPublished();
+        this.checkIsAvailable();
+        this.checkRealPrice(this.form.price, this.form.sale);
+        if (this.form.amount > 0) {
+            this.form.available = true;
+        } else {
+            this.form.available = false;
+        }
     },
 
     updated() {
-        this.checkIsPublished();
+        this.checkIsAvailable();
+        this.checkRealPrice(this.form.price, this.form.sale);
+        if (this.form.amount > 0) {
+            this.form.available = true;
+        } else {
+            this.form.available = false;
+        }
     },
 
     methods: {
-        checkIsPublished() {
+        checkIsAvailable() {
             if (this.form.available) {
                 this.form.available = true;
             } else {
@@ -202,6 +253,10 @@ export default {
         previewImage(e) {
             const file = e.target.files[0];
             this.url = URL.createObjectURL(file);
+        },
+
+        checkRealPrice(price, sale) {
+            this.form.real_price = price - sale;
         },
     },
 

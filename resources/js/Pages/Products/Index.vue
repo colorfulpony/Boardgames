@@ -32,8 +32,9 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">Name</th>
-                    <th scope="col" class="px-6 py-3">Price</th>
+                    <th scope="col" class="px-6 py-3">Price with sale</th>
                     <th scope="col" class="px-6 py-3">Sale</th>
+                    <th scope="col" class="px-6 py-3">Amount</th>
                     <th scope="col" class="px-6 py-3">
                         <span class="sr-only">Edit</span>
                     </th>
@@ -41,7 +42,7 @@
             </thead>
             <tbody v-for="product in products.data" :key="product.id">
                 <tr
-                    :class="product.deleted_at ? 'bg-gray-300' : ''"
+                    :class="deletedOrAvailableCheck(product.available, product.deleted_at)"
                     class="bg-white border-b"
                 >
                     <th
@@ -54,13 +55,19 @@
                         scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                        {{ product.price }}
+                        {{ product.real_price }}
                     </th>
                     <th
                         scope="row"
                         class="px-6 w-24 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
                         {{ product.sale }}
+                    </th>
+                    <th
+                        scope="row"
+                        class="px-6 w-24 py-4 font-medium text-gray-900 whitespace-nowrap"
+                    >
+                        {{ product.amount }}
                     </th>
                     <td class="">
                         <Link
@@ -95,6 +102,30 @@
         <Paginator :links="products.links" />
     </div>
 </template>
+
+<script>
+export default {
+    methods: {
+        deletedOrAvailableCheck(available, deleted_at) {
+            if (!available && !deleted_at) {
+                return 'bg-gray-300'
+            }
+
+            if(!available && deleted_at) {
+                return 'bg-red-500'
+            }
+
+            if(available && deleted_at) {
+                return 'bg-red-300'
+            }
+
+            if(available && !deleted_at) {
+                return ''
+            }
+        }
+    }
+}
+</script>
 
 <script setup>
 import Paginator from "../Shared/Paginator.vue";

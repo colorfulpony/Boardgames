@@ -28,7 +28,7 @@ class ProductController extends CoreController
             })
             ->withTrashed()
             ->orderBy('deleted_at', 'asc')
-            ->select(['id', 'name', 'price', 'sale', 'available', 'deleted_at'])
+            ->select(['id', 'name', 'real_price', 'sale', 'amount', 'available', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [
@@ -61,7 +61,7 @@ class ProductController extends CoreController
 
     public function edit($productId)
     {
-        $product = Product::findOrFail($productId);
+        $product = Product::withTrashed()->findOrFail($productId);
         return Inertia::render('Products/Edit', [
             'product' => $product,
             'image' => asset('storage/images/product/' . $product->image),

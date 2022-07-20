@@ -16,14 +16,19 @@ class ProductFactory extends Factory
      */
     public function definition()
     {
+        $price = random_int(500, 7000);
+        $sale = random_int(0, 500);
+        $amount = $this->faker->numberBetween(0, 100);
         return [
             'name' => $this->faker->word(),
             'image' => $this->faker->word(),
+            'amount' => $amount,
             'product_category_id' => $this->faker->numberBetween(1, 20),
-            'price' => random_int(500, 7000),
-            'available' => rand(1, 2) > 1,
-            'sale' => random_int(0, 500),
+            'price' => $price,
+            'sale' => $sale,
+            'real_price' => $price - $sale,
             'description' => $this->faker->text(1000, 1500),
+            'available' => $amount > 0,
         ];
     }
 }

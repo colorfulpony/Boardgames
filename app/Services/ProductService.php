@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Product;
 use App\Services\CoreService;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 
 class ProductService extends CoreService
 {
@@ -26,13 +26,15 @@ class ProductService extends CoreService
     {
         $product = Product::find($productId);
 
-        File::delete(public_path() . '/storage/images/product/' . $product->image);
+        if($data['image'] instanceof UploadedFile) {
+            File::delete(public_path() . '/storage/images/product/' . $product->image);
 
-        $image_name = $data['name'] . '_' . $data['image']->hashName();
+            $image_name = $data['name'] . '_' . $data['image']->hashName();
 
-        $saveImage = $data['image']->storeAs('public/images/product/', $image_name);
+            $saveImage = $data['image']->storeAs('public/images/product/', $image_name);
 
-        $data['image'] = $image_name;
+            $data['image'] = $image_name;
+        }
 
         $res = $product->update($data);
 

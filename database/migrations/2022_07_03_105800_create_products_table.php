@@ -18,11 +18,13 @@ return new class extends Migration
 
             $table->string('name');
             $table->text('image');
+            $table->integer('amount');
             $table->unsignedBigInteger('product_category_id')->nullable();
             $table->bigInteger('price')->unsigned();
-            $table->boolean('available')->default(false);
             $table->integer('sale')->nullable();
+            $table->bigInteger('real_price')->unsigned();
             $table->text('description');
+            $table->boolean('available')->default(false);
 
             $table->foreign('product_category_id')
                   ->references('id')

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Product;
 
+use App\Rules\CheckImageDataTypeRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ProductUpdateRequest extends FormRequest
@@ -24,10 +25,12 @@ class ProductUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|unique:products,name,' . $this->id,
-            'image' => 'required|image|mimes:jpeg,jpg,png,svg|max:2048',
-            'price' => 'required|integer',
-            'sale' => 'required|integer',
+            'name' => 'unique:products,name,' . $this->id . '|required|string',
+            'amount' => 'required|integer|gt:-1',
+            'image' => new CheckImageDataTypeRule(),
+            'price' => 'required|integer|gt:-1',
+            'sale' => 'required|integer|gt:-1',
+            'real_price' => 'required|integer|gt:-1',
             'description' => 'required|string',
             'available' => 'boolean',
             'product_category_id' => 'required|integer|gt:0',

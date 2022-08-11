@@ -74,8 +74,7 @@ var __default__ = {
   props: {
     product: Object,
     productCategories: Object,
-    image: String,
-    imageName: String
+    image: String
   },
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;

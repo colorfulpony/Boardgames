@@ -1,6 +1,7 @@
 import { createApp, h } from 'vue'
 import { createInertiaApp, Link, Head } from '@inertiajs/inertia-vue3'
 import Layout from './Pages/Shared/Layout.vue'
+import Multiselect from '@suadelabs/vue3-multiselect'
 
 createInertiaApp({
   resolve: async name => {
@@ -15,6 +16,7 @@ createInertiaApp({
       .use(plugin)
       .component('Link', Link)
       .component('Head', Head)
+      .component('Multiselect', Multiselect)
       .mount(el)
   },
 

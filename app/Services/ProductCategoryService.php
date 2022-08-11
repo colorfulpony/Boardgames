@@ -17,7 +17,7 @@ class ProductCategoryService extends CoreService
 
     public function update($data, $productCategoryId)
     {
-        $productCategory = ProductCategory::find($productCategoryId);
+        $productCategory = ProductCategory::withTrashed()->find($productCategoryId);
 
         $res = $productCategory->update($data);
 

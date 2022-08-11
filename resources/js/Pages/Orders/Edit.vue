@@ -30,6 +30,32 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="tag"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >User
+                </label>
+                <select
+                    v-model="form.user_id"
+                    id="tag"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                >
+                    <option disabled selected value="0">Choose user</option>
+                    <option
+                        v-for="user in users"
+                        :key="user.id"
+                        v-bind:value="user.id"
+                    >
+                        {{ user.username }}
+                    </option>
+                </select>
+                <div
+                    v-if="form.errors.user_id"
+                    v-text="form.errors.user_id"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="full_cost"
                     class="block mb-2 text-sm font-medium text-gray-900"
                     >Full Cost</label
@@ -49,6 +75,60 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="products_id"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Select products</label
+                >
+                <select
+                    name="products_id"
+                    multiple
+                    v-model="product_ids"
+                    id="products_id"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                >
+                    <option
+                        v-for="product in products"
+                        :key="product.id"
+                        v-bind:value="product.id"
+                    >
+                        {{ product.name }}
+                    </option>
+                </select>
+                <label
+                    v-if="form.products_id.length != 0"
+                    for="amoutn"
+                    class="mt-6 block mb-2 text-sm font-medium text-gray-900"
+                    >Amount</label
+                >
+                <template v-for="product in products" :key="product.id">
+                    <template
+                        v-for="product_id in product_ids"
+                        :key="product_id"
+                    >
+                        <template v-if="product.id == product_id">
+                            <div class="flex justify-between py-5">
+                                <span>{{ product.name }}</span>
+                                <input
+                                    v-model="amounts[product.id]"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-3/4 p-2.5"
+                                    type="number"
+                                    id="amount"
+                                    name="amount"
+                                    min="0"
+                                    max="10000000000"
+                                />
+                            </div>
+                        </template>
+                    </template>
+                </template>
+                <div
+                    v-if="form.errors.products_id"
+                    v-text="form.errors.products_id"
+                    class="text-red-500 text-xs mt-1"
+                ></div>
+            </div>
+            <div class="mb-6">
+                <label
                     for="date_of_order"
                     class="block mb-2 text-sm font-medium text-gray-900"
                     >Date of Order</label
@@ -58,9 +138,7 @@
                     id="date_of_order"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                     v-model="form.date_of_order"
-                    :flow="flow"
                     modelType="yyyy-MM-dd HH:mm:ss"
-                    :format="format"
                     autoApply
                 />
                 <div
@@ -80,9 +158,7 @@
                     id="date_of_payment"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     v-model="form.date_of_payment"
-                    :flow="flow"
                     modelType="yyyy-MM-dd HH:mm:ss"
-                    :format="format"
                     autoApply
                 />
                 <div
@@ -103,31 +179,60 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, reactive } from "vue";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import { useForm } from "@inertiajs/inertia-vue3";
 
-const flow = ref(["year", "month", "calendar"]);
-
-let format = (date) => {
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-};
-
 let props = defineProps({
     order: Object,
+    users: Object,
+    order_products_id_amounts: Object,
+    products: Object,
 });
 
-let form = useForm(props.order);
+const product_ids = ref([]);
+const amounts = ref([]);
+
+console.log(props.order)
+
+onMounted(() => {
+    props.order_products_id_amounts.forEach((order_product_id_amount) => {
+        product_ids.value.push(order_product_id_amount.product_id);
+        amounts.value[order_product_id_amount.product_id] =
+            order_product_id_amount.amount;
+    });
+});
+
+let form = useForm({
+    id: props.order.id,
+    delivery_adress: props.order.delivery_adress,
+    full_cost: props.order.full_cost,
+    date_of_order: props.order.date_of_order,
+    date_of_payment: props.order.date_of_payment,
+    user_id: props.order.user_id,
+    products_id: [],
+});
+
+let order_product_amount_count = (product_ids, amounts, products_id) => {
+    // clear products_id array if click submit button 2 and more times
+    if (products_id.length > 0) {
+        products_id.splice(0, products_id.length);
+    }
+    for (var i = 0; i < product_ids.value.length; i++) {
+        const order_product_amount = {
+            product_id: 0,
+            amount: 0,
+        };
+        order_product_amount.product_id = product_ids.value[i];
+        order_product_amount.amount = amounts.value[product_ids.value[i]];
+        products_id.push(order_product_amount);
+    }
+    console.log(products_id)
+};
 
 let submit = () => {
+    order_product_amount_count(product_ids, amounts, form.products_id);
     form.post("/order/update");
 };
 </script>

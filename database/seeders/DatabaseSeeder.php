@@ -20,30 +20,28 @@ class DatabaseSeeder extends Seeder
             PostsTagSeeder::class,
             PostSeeder::class,
             PostsTagPostSeeder::class,
-            UserAdressSeeder::class,
-            UserSeeder::class,
             OrderSeeder::class,
-            UserOrderSeeder::class,
+            UserSeeder::class,
             ProductCategorySeeder::class,
             ProductSeeder::class,
         ]);
 
         User::factory()->create([
-            'name' => 'Admin User',
+            'username' => 'Admin User',
             'email' => 'admin@gmail.com',
             'role' => 1,
             'password' => 'mak7ka321',
         ]);
 
         User::factory()->create([
-            'name' => 'Manager User',
+            'username' => 'Manager User',
             'email' => 'manager@gmail.com',
             'role' => 2,
             'password' => 'mak7ka321',
         ]);
 
         User::factory()->create([
-            'name' => 'Default User',
+            'username' => 'Default User',
             'email' => 'default@gmail.com',
             'role' => 3,
             'password' => 'mak7ka321',

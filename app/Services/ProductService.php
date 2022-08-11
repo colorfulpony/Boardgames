@@ -24,7 +24,7 @@ class ProductService extends CoreService
 
     public function update($data, $productId)
     {
-        $product = Product::find($productId);
+        $product = Product::withTrashed()->find($productId);
 
         if($data['image'] instanceof UploadedFile) {
             File::delete(public_path() . '/storage/images/product/' . $product->image);

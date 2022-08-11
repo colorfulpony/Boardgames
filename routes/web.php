@@ -2,15 +2,19 @@
 
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderProductController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostsTagController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Models\Order;
+use App\Models\OrderProductModel;
 use App\Models\Post;
 use App\Models\PostsTag;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -59,6 +63,8 @@ Route::middleware('auth')->group(function() {
     Route::delete('/order/{id}', [OrderController::class, 'destroy'])->name('order.destroy')->can('delete', Order::class);
     Route::get('/order/restore/{id}', [OrderController::class, 'restore'])->name('order.restore')->can('restore', Order::class);
 
+    Route::delete('/order/{orderId}/product/{productId}', [OrderProductController::class, 'destroy'])->name('order_product.destroy');
+
     Route::get('/product_categories', [ProductCategoryController::class, 'index'])->name('product_category.index')->can('viewAny', ProductCategory::class);
     Route::get('/product_category/create', [ProductCategoryController::class, 'create'])->name('product_category.create')->can('create', ProductCategory::class);
     Route::post('/product_category/create', [ProductCategoryController::class, 'store'])->name('product_category.store')->can('create', ProductCategory::class);
@@ -74,5 +80,13 @@ Route::middleware('auth')->group(function() {
     Route::post('/product/update', [ProductController::class, 'update'])->name('product.update')->can('update', Product::class);
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy')->can('delete', Product::class);
     Route::get('/product/restore/{id}', [ProductController::class, 'restore'])->name('product.restore')->can('restore', Product::class);
+
+    Route::get('/users', [UserController::class, 'index'])->name('user.index')->can('viewAny', User::class);
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.create')->can('create', User::class);
+    Route::post('/user/create', [UserController::class, 'store'])->name('user.store')->can('create', User::class);
+    Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit')->can('update', User::class);
+    Route::post('/user/update', [UserController::class, 'update'])->name('user.update')->can('update', User::class);
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy')->can('delete', User::class);
+    Route::get('/user/restore/{id}', [UserController::class, 'restore'])->name('user.restore')->can('restore', User::class);
 });
 

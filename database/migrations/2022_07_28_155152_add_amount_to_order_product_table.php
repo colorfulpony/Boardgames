@@ -13,13 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->unsignedBigInteger('adress_id')->after('email')->nullable();
-
-            $table->foreign('adress_id')
-                  ->references('id')
-                  ->on('user_adresses')
-                  ->onDelete('cascade');
+        Schema::table('order_product', function (Blueprint $table) {
+            $table->integer('amount');
         });
     }
 
@@ -30,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['adress_id']);
+        Schema::table('order_product', function (Blueprint $table) {
+            $table->dropColumn('amount');
         });
     }
 };

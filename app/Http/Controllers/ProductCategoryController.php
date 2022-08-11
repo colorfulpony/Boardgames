@@ -58,7 +58,7 @@ class ProductCategoryController extends CoreController
 
     public function edit($productCategoryId)
     {
-        $productCategory = ProductCategory::findOrFail($productCategoryId);
+        $productCategory = ProductCategory::withTrashed()->findOrFail($productCategoryId);
         return Inertia::render('ProductCategories/Edit', [
             'productCategory' => $productCategory,
         ]);

@@ -17,10 +17,9 @@ class ProductCategoryFactory extends Factory
      */
     public function definition()
     {
-        $title = $this->faker->word();
         return [
-            'title' => $title,
-            'slug' => Str::slug($title),
+            'title' => $this->faker->sentence(),
+            'slug' => Str::slug($this->faker->sentence()),
             'description' => $this->faker->text(100, 500),
         ];
     }

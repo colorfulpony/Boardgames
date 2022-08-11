@@ -23,12 +23,14 @@ class OrderStoreRequest extends FormRequest
      */
     public function rules()
     {
+        // dd($this);
         return [
             'delivery_adress' => 'required|string',
             'full_cost' => 'required|integer',
-            'date_of_order' => 'required|date',
-            'date_of_payment' => 'required|date',
+            'date_of_order' => 'required|date|before_or_equal:date_of_payment',
+            'date_of_payment' => 'nullable|date|after_or_equal:date_of_order',
             'user_id' => 'required|integer',
+            'products_id.*.*' => 'integer',
         ];
     }
 }

@@ -44,7 +44,7 @@
                 :key="productCategory.id"
             >
                 <tr
-                    :class="productCategory.deleted_at ? 'bg-gray-300' : ''"
+                    :class="productCategory.deleted_at ? 'bg-red-300' : ''"
                     class="bg-white border-b"
                 >
                     <th

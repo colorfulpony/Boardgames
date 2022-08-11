@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\OrderStoreRequest;
 use App\Http\Requests\Order\OrderUpdateRequest;
 use App\Models\Order;
+use App\Models\OrderProduct;
+use App\Models\Product;
+use App\Models\User;
 use App\Services\OrderService;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
+use stdClass;
 
 class OrderController extends CoreController
 {
@@ -26,7 +30,9 @@ class OrderController extends CoreController
                 })
                 ->withTrashed()
                 ->orderBy('deleted_at', 'asc')
-                ->select(['id', 'delivery_adress', 'full_cost', 'date_of_order', 'deleted_at'])
+                ->with('products')
+                ->join('users', 'orders.user_id', '=', 'users.id')
+                ->select(['orders.id', 'orders.delivery_adress', 'orders.full_cost', 'orders.date_of_order', 'orders.deleted_at', 'users.username as username'])
                 ->paginate(10)
                 ->withQueryString(),
             'can' => [
@@ -36,19 +42,25 @@ class OrderController extends CoreController
                 'restore' => Auth::user()->can('restore', Order::class),
             ],
             'filters' => Request::only(['search']),
+            'productsAmount' => OrderProduct::all(),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Orders/Create');
+        return Inertia::render('Orders/Create', [
+            'users' => collect(User::query()->select(['id', 'name'])->get()),
+
+            'products' => Product::all(),
+        ]);
     }
 
-    public function store(OrderUpdateRequest $request)
+    public function store(OrderStoreRequest $request)
     {
-        $data = $request->validated();
 
+        $data = $request->validated();
         $order = $this->service->store($data);
+        // dd($order);
 
         if ($order) {
             return redirect()->route('order.index')->with('msg', 'Successfuly created');
@@ -57,9 +69,25 @@ class OrderController extends CoreController
 
     public function edit($orderId)
     {
-        $order = Order::findOrFail($orderId);
+        $order_products = Order::find($orderId)->products()->get();
+        $order_products_id_amounts = [];
+        foreach($order_products as $order_product) {
+            $order_product_id_amount = new stdClass();
+            $order_product_id_amount->product_id = $order_product->pivot->product_id;
+            $order_product_id_amount->amount = $order_product->pivot->amount;
+
+            array_push($order_products_id_amounts, $order_product_id_amount);
+        }
+
+        $order = Order::withTrashed()->findOrFail($orderId);
         return Inertia::render('Orders/Edit', [
-            'order' => $order
+            'order' => $order,
+
+            'order_products_id_amounts' => $order_products_id_amounts,
+
+            'products' => Product::all(),
+
+            'users' => collect(User::query()->select(['id', 'username'])->get())
         ]);
     }
 
@@ -68,7 +96,6 @@ class OrderController extends CoreController
         $orderId = $request->input('id');
 
         $data = $request->validated();
-
         $res = $this->service->update($data, $orderId);
 
         if ($res) {

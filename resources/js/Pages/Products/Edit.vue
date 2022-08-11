@@ -279,7 +279,6 @@ let props = defineProps({
     product: Object,
     productCategories: Object,
     image: String,
-    imageName: String,
 });
 
 let form = useForm(props.product);

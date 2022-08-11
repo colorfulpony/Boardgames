@@ -7,7 +7,6 @@ use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\ProductService;
-use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
@@ -65,7 +64,6 @@ class ProductController extends CoreController
         return Inertia::render('Products/Edit', [
             'product' => $product,
             'image' => asset('storage/images/product/' . $product->image),
-            'imageName' => $product->image,
             'productCategories' => collect(ProductCategory::query()->select(['id', 'title'])->get())
         ]);
     }

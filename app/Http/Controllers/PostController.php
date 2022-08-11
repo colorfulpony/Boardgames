@@ -61,7 +61,7 @@ class PostController extends CoreController
 
     public function edit($postId)
     {
-        $post = Post::findOrFail($postId);
+        $post = Post::withTrashed()->findOrFail($postId);
         return Inertia::render('Posts/Edit', [
             'post' => $post,
 

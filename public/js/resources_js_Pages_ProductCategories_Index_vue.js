@@ -233,7 +233,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tbody", {
       key: productCategory.id
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", {
-      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([productCategory.deleted_at ? 'bg-gray-300' : '', "bg-white border-b"])
+      "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([productCategory.deleted_at ? 'bg-red-300' : '', "bg-white border-b"])
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(productCategory.title), 1
     /* TEXT */
     ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(productCategory.slug), 1

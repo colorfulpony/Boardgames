@@ -42,14 +42,35 @@
             </thead>
             <tbody v-for="product in products.data" :key="product.id">
                 <tr
-                    :class="deletedOrAvailableCheck(product.available, product.deleted_at)"
+                    :class="
+                        deletedOrAvailableCheck(
+                            product.available,
+                            product.deleted_at
+                        )
+                    "
                     class="bg-white border-b"
                 >
                     <th
                         scope="row"
                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                     >
-                        {{ product.name }}
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 object-scale-down h-24">
+                                <img
+                                    class="w-full h-full"
+                                    :src="
+                                        '../storage/images/product/' +
+                                        product.image
+                                    "
+                                    alt=""
+                                />
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-gray-900 whitespace-no-wrap">
+                                    {{ product.name }}
+                                </p>
+                            </div>
+                        </div>
                     </th>
                     <th
                         scope="row"
@@ -108,23 +129,23 @@ export default {
     methods: {
         deletedOrAvailableCheck(available, deleted_at) {
             if (!available && !deleted_at) {
-                return 'bg-gray-300'
+                return "bg-gray-300";
             }
 
-            if(!available && deleted_at) {
-                return 'bg-red-500'
+            if (!available && deleted_at) {
+                return "bg-red-500";
             }
 
-            if(available && deleted_at) {
-                return 'bg-red-300'
+            if (available && deleted_at) {
+                return "bg-red-300";
             }
 
-            if(available && !deleted_at) {
-                return ''
+            if (available && !deleted_at) {
+                return "";
             }
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <script setup>
@@ -154,6 +175,8 @@ watch(
         );
     }, 300)
 );
+
+console.log(props.products.data[0])
 
 const destroy = (id) => {
     if (confirm("Are you sure?")) {

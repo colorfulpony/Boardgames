@@ -31,7 +31,7 @@ class ProductService extends CoreService
 
             $image_name = $data['name'] . '_' . $data['image']->hashName();
 
-            $saveImage = $data['image']->storeAs('public/images/product/', $image_name);
+            $saveImage = $data['image']->storeAs('public/images/product', $image_name);
 
             $data['image'] = $image_name;
         }

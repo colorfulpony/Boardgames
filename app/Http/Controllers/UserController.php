@@ -60,9 +60,12 @@ class UserController extends CoreController
     public function edit($userId)
     {
         $user = User::withTrashed()->findOrFail($userId);
+        $fullAddressData = User::withTrashed()->findOrFail($userId, ['country', 'city', 'street']);
+        $fullAddress = $fullAddressData->street . ', ' . $fullAddressData->city . ', ' . $fullAddressData->country;
         return Inertia::render('Users/Edit', [
             'user' => $user,
             'image' => asset('storage/images/users/' . $user->image),
+            'fullAddress' => $fullAddress
         ]);
     }
 

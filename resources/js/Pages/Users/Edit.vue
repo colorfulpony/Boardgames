@@ -150,6 +150,23 @@
             </div>
             <div class="mb-6">
                 <label
+                    for="street"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Address</label
+                >
+                <VueGoogleAutocomplete
+                    :ref="this.fullAddress"
+                    id="map"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder=""
+                    :v-text="this.$props.fullAddress"
+                    v-on:placechanged="getAddressData"
+                    :country="['ua']"
+                >
+                </VueGoogleAutocomplete>
+            </div>
+            <div class="mb-6">
+                <label
                     for="country"
                     class="block mb-2 text-sm font-medium text-gray-900"
                     >Country</label
@@ -261,11 +278,13 @@
 </template>
 
 <script>
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
     data() {
         return {
             url: null,
-        }
+            address: "",
+        };
     },
 
     methods: {
@@ -273,8 +292,15 @@ export default {
             const file = e.target.files[0];
             this.url = URL.createObjectURL(file);
         },
-    }
-}
+
+        getAddressData: function (addressData, placeResultData, id) {
+            this.address = addressData;
+            this.form.country = addressData.country;
+            this.form.city = addressData.locality;
+            this.form.street = addressData.route;
+        },
+    },
+};
 </script>
 
 <script setup>
@@ -284,7 +310,8 @@ import { useForm } from "@inertiajs/inertia-vue3";
 
 let props = defineProps({
     user: Object,
-    image: Object,
+    image: String,
+    fullAddress: String
 });
 
 let form = useForm({

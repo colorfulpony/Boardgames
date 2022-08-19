@@ -8,6 +8,7 @@
     <script src="{{ mix('/js/manifest.js') }}" defer></script>
     <script src="{{ mix('/js/vendor.js') }}" defer></script>
     <script src="{{ mix('/js/app.js') }}" defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmWfBkfT-Pp6yIv_3ShnTKEl8qELm_Se4&libraries=places"></script>
     @inertiaHead
   </head>
   <body>

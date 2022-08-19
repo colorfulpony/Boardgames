@@ -27,7 +27,7 @@ class ProductController extends CoreController
             })
             ->withTrashed()
             ->orderBy('deleted_at', 'asc')
-            ->select(['id', 'name', 'real_price', 'sale', 'amount', 'available', 'deleted_at'])
+            ->select(['id', 'name', 'image', 'real_price', 'sale', 'amount', 'available', 'deleted_at'])
             ->paginate(10)
             ->withQueryString(),
             'can' => [

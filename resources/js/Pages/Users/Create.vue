@@ -104,7 +104,7 @@
                     class="text-red-500 text-xs mt-1"
                 ></div>
             </div>
-             <div class="mb-6">
+            <div class="mb-6">
                 <label
                     for="image"
                     class="block mb-2 text-sm font-medium text-gray-900"
@@ -122,6 +122,22 @@
                     v-text="form.errors.image"
                     class="text-red-500 text-xs mt-1"
                 ></div>
+            </div>
+            <div class="mb-6">
+                <label
+                    for="street"
+                    class="block mb-2 text-sm font-medium text-gray-900"
+                    >Address</label
+                >
+                <VueGoogleAutocomplete
+                    ref="address"
+                    id="map"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder=""
+                    v-on:placechanged="getAddressData"
+                    :country="['ua']"
+                >
+                </VueGoogleAutocomplete>
             </div>
             <div class="mb-6">
                 <label
@@ -214,15 +230,9 @@
                     <option disabled selected value="0">
                         Choose User Role
                     </option>
-                    <option v-bind:value="3">
-                        Default
-                    </option>
-                    <option v-bind:value="2">
-                        Manager
-                    </option>
-                    <option v-bind:value="1">
-                        Admin
-                    </option>
+                    <option v-bind:value="3">Default</option>
+                    <option v-bind:value="2">Manager</option>
+                    <option v-bind:value="1">Admin</option>
                 </select>
                 <div
                     v-if="form.errors.role"
@@ -230,6 +240,7 @@
                     class="text-red-500 text-xs mt-1"
                 ></div>
             </div>
+
             <button
                 :disabled="form.processing"
                 type="submit"
@@ -242,11 +253,13 @@
 </template>
 
 <script>
+import VueGoogleAutocomplete from "vue-google-autocomplete";
 export default {
     data() {
         return {
             url: null,
-        }
+            address: "",
+        };
     },
 
     methods: {
@@ -254,13 +267,19 @@ export default {
             const file = e.target.files[0];
             this.url = URL.createObjectURL(file);
         },
-    }
-}
+
+        getAddressData: function (addressData, placeResultData, id) {
+            this.address = addressData;
+            this.form.country = addressData.country;
+            this.form.city = addressData.locality;
+            this.form.street = addressData.route;
+        },
+    },
+};
 </script>
 
-
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/inertia-vue3";
 import Datepicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";

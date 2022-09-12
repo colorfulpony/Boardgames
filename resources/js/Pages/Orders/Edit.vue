@@ -194,8 +194,6 @@ let props = defineProps({
 const product_ids = ref([]);
 const amounts = ref([]);
 
-console.log(props.order)
-
 onMounted(() => {
     props.order_products_id_amounts.forEach((order_product_id_amount) => {
         product_ids.value.push(order_product_id_amount.product_id);

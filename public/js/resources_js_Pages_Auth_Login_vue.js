@@ -13,9 +13,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 
-var __default__ = {
-  layout: ""
-};
+var __default__ = {};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
   name: 'Login',
   setup: function setup(__props, _ref) {
@@ -27,7 +25,11 @@ var __default__ = {
     });
 
     var submit = function submit() {
-      form.post("/login");
+      form.post("/login", {
+        onSuccess: function onSuccess(val) {
+          console.log(val);
+        }
+      });
     };
 
     var __returned__ = {
@@ -140,7 +142,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "text-red-500 text-xs mt-1"
   }, null, 8
   /* PROPS */
-  , _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-red-500 text-xs italic\">\r\n                    Please choose a password.\r\n                </p> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  , _hoisted_8)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <p class=\"text-red-500 text-xs italic\">\n                    Please choose a password.\n                </p> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "bg-blue-500 text-white rounded py-2 px-4 hover:bg-blue-700",
     disabled: $setup.form.processing

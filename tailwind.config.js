@@ -8,7 +8,8 @@ module.exports = {
     theme: {
         extend: {},
         maxWidth: {
-            '200': '200px'
+            '200': '200px',
+            '20': '20px'
         }
     },
     plugins: [

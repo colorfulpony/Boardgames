@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\TestMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -22,6 +23,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        // TestMiddleware::class,
     ];
 
     /**
@@ -38,6 +40,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             HandleInertiaRequests::class,
+            // TestMiddleware::class,
         ],
 
         'api' => [
@@ -65,5 +68,6 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'test' => \Illuminate\Auth\Middleware\TestMiddleware::class,
     ];
 }

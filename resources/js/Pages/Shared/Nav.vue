@@ -2,12 +2,24 @@
     <nav>
         <ul class="flex items-center space-x-6">
             <li>
-                <NavLink href="/" :active="$page.component === 'Home'"
+                <NavLink href="/user" :active="$page.component === 'Home'"
                     >Home</NavLink
                 >
             </li>
 
-            <Menu v-if="admin || manager" as="div" class="relative inline-block text-left">
+            <li>
+                <NavLink
+                    href="/user/products"
+                    :active="$page.component === 'UserSide/Products'"
+                    >All Products</NavLink
+                >
+            </li>
+
+            <Menu
+                v-if="admin || manager"
+                as="div"
+                class="relative inline-block text-left"
+            >
                 <div>
                     <MenuButton
                         class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
@@ -109,10 +121,34 @@
             </Menu>
 
             <li>
-                <NavLink href="/logout" method="post" as="button"
+                <NavLink
+                    href="/user/cart"
+                    :active="$page.component === 'UserSide/Cart'"
+                    >Cart ({{ cartAmountData || 0 }})</NavLink
+                >
+            </li>
+            <li v-if="auth">
+                <NavLink @click="deleteLocalStorage()" href="/logout" method="post" as="button"
                     >Logout</NavLink
                 >
             </li>
+
+            <li v-if="!auth">
+                <NavLink
+                    href="/login"
+                    :active="$page.component === 'Auth/Login'"
+                    >Login</NavLink
+                >
+            </li>
+
+            <li v-if="!auth">
+                <NavLink
+                    href="/register"
+                    :active="$page.component === 'Auth/Register'"
+                    >Register</NavLink
+                >
+            </li>
+
         </ul>
     </nav>
 </template>
@@ -123,17 +159,84 @@ export default {
         NavLink,
     },
 
+    data() {
+        return {
+            cartAmountData: 0,
+        };
+    },
+
+    props: [
+        "cartAmountProps"
+    ],
+
+    watch: {
+        cartAmountProps: function (newVal, oldVal) {
+            this.cartAmountData = newVal
+        }
+    },
+
+    mounted() {
+        if (localStorage.getItem("cart")) {
+            let cart = localStorage.getItem("cart");
+            cart = JSON.parse(cart);
+            let cartItemsAmount = 0;
+            cart.forEach((productInCart) => {
+                cartItemsAmount += productInCart.amount;
+            });
+
+            this.cartAmountData = cartItemsAmount;
+        }
+    },
+
     computed: {
         admin() {
-            return this.$page.props.auth.user.can.admin
+            if (this.$page.props.auth.user.autorized === true) {
+                if (this.$page.props.auth.user.can.admin) {
+                    return this.$page.props.auth.user.can.admin;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         },
 
         manager() {
-            return this.$page.props.auth.user.can.manager
+            if (this.$page.props.auth.user.autorized === true) {
+                if (this.$page.props.auth.user.can.manager) {
+                    return this.$page.props.auth.user.can.manager;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         },
 
         default() {
-            return this.$page.props.auth.user.can.default
+            if (this.$page.props.auth.user.autorized === true) {
+                if (this.$page.props.auth.user.can.default) {
+                    return this.$page.props.auth.user.can.default;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        },
+
+        auth() {
+            if (this.$page.props.auth.user.autorized === true) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+    },
+
+    methods: {
+        deleteLocalStorage() {
+            localStorage.removeItem('cart');
         }
     },
 };

@@ -33,7 +33,6 @@ __webpack_require__.r(__webpack_exports__);
     var props = __props;
     var product_ids = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]);
     var amounts = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]);
-    console.log(props.order);
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(function () {
       props.order_products_id_amounts.forEach(function (order_product_id_amount) {
         product_ids.value.push(order_product_id_amount.product_id);

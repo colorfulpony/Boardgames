@@ -39,157 +39,162 @@
                     </th>
                 </tr>
             </thead>
-            <tbody
-                class="content-center"
-                v-for="order in orders.data"
-                :key="order.id"
-            >
-                <tr
-                    :class="order.deleted_at ? 'bg-red-300' : ''"
-                    class="bg-white border-b"
-                >
-                    <th
-                        scope="row"
-                        class="h-auto px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+            <tbody class="content-center">
+                <template v-for="order in orders.data" :key="order.id">
+                    <tr
+                        :class="order.deleted_at ? 'bg-red-300' : ''"
+                        class="bg-white border-b"
                     >
-                        {{ order.delivery_adress }}
-                    </th>
-                    <th
-                        scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                        {{ order.username }}
-                    </th>
-                    <th
-                        scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                        <button @click="showProducts(order.id)">
-                            Products({{ order.products.length }})
-                        </button>
-                    </th>
-                    <th
-                        scope="row"
-                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                        {{ order.full_cost }}
-                    </th>
-                    <th
-                        scope="row"
-                        class="px-6 w-24 py-4 font-medium text-gray-900 whitespace-nowrap"
-                    >
-                        {{ order.date_of_order }}
-                    </th>
-                    <td class="">
-                        <Link
-                            v-if="can.edit"
-                            :href="`/order/${order.id}/edit`"
-                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
-                            >Edit</Link
+                        <th
+                            scope="row"
+                            class="h-auto px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                    </td>
-                    <td class="">
-                        <button
-                            v-if="can.delete && !order.deleted_at"
-                            @click="destroy(order.id)"
-                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                            {{ order.delivery_adress }}
+                        </th>
+                        <th
+                            scope="row"
+                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                            Delete
-                        </button>
-                        <button
-                            v-if="can.restore && order.deleted_at"
-                            @click="restore(order.id)"
-                            class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                            {{ order.username }}
+                        </th>
+                        <th
+                            scope="row"
+                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                            Restore
-                        </button>
-                    </td>
-                </tr>
-                <tr
-                    v-if="
-                        this.order_products_is_visible_id == order.id &&
-                        order.products.length != 0
-                    "
-                >
-                    <table class="text-sm text-left text-gray-500">
-                        <thead class="bg-blue-600 text-xs text-white uppercas">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    <span class="sr-only">Image</span>
-                                </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Name
-                                </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Full Price
-                                </th>
-                                <th scope="col" class="py-3 px-6">
-                                    Amount
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    <span class="sr-only">Edit</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody
-                            v-for="product in order.products"
-                            :key="product.id"
+                            <button @click="showProducts(order.id)">
+                                Products({{ order.products.length }})
+                            </button>
+                        </th>
+                        <th
+                            scope="row"
+                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                         >
-                            <tr class="border-b border-blue-400 bg-blue-500">
-                                <th
-                                    scope="row"
-                                    class="w-20 py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
+                            {{ order.full_cost }}
+                        </th>
+                        <th
+                            scope="row"
+                            class="px-6 w-24 py-4 font-medium text-gray-900 whitespace-nowrap"
+                        >
+                            {{ order.date_of_order }}
+                        </th>
+                        <td class="">
+                            <Link
+                                v-if="can.edit"
+                                :href="`/order/${order.id}/edit`"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                                >Edit</Link
+                            >
+                        </td>
+                        <td class="">
+                            <button
+                                v-if="can.delete && !order.deleted_at"
+                                @click="destroy(order.id)"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Delete
+                            </button>
+                            <button
+                                v-if="can.restore && order.deleted_at"
+                                @click="restore(order.id)"
+                                class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                            >
+                                Restore
+                            </button>
+                        </td>
+                    </tr>
+                    <tr
+                        v-if="
+                            this.order_products_is_visible_id == order.id &&
+                            order.products.length != 0
+                        "
+                    >
+                        <table class="text-sm text-left text-gray-500">
+                            <thead
+                                class="bg-blue-600 text-xs text-white uppercas"
+                            >
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        <span class="sr-only">Image</span>
+                                    </th>
+                                    <th scope="col" class="py-3 px-6">Name</th>
+                                    <th scope="col" class="py-3 px-6">
+                                        Full Price
+                                    </th>
+                                    <th scope="col" class="py-3 px-6">
+                                        Amount
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                v-for="product in order.products"
+                                :key="product.id"
+                            >
+                                <tr
+                                    class="border-b border-blue-400 bg-blue-500"
                                 >
-                                    <img
-                                        :src="
-                                            '../storage/images/product/' +
-                                            product.image
-                                        "
-                                        alt=""
-                                    />
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
-                                >
-                                    {{ product.name }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
-                                >
-                                    {{ product.real_price }}
-                                </th>
-                                <th
-                                    scope="row"
-                                    class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
-                                >
-                                    {{ product.pivot.amount }}
-                                </th>
-                                <td
-                                    scope="row"
-                                    class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
-                                >
-                                    <Link
-                                        v-if="can.edit"
-                                        :href="`/product/${product.id}/edit`"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
-                                        >Edit</Link
+                                    <th
+                                        scope="row"
+                                        class="w-20 py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
                                     >
-                                </td>
-                                <td class="">
-                                    <button
-                                        v-if="can.delete"
-                                        @click="deleteProduct(order.id, product.id)"
-                                        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                                        <img
+                                            :src="
+                                                '../storage/images/product/' +
+                                                product.image
+                                            "
+                                            alt=""
+                                        />
+                                    </th>
+                                    <th
+                                        scope="row"
+                                        class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
                                     >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </tr>
+                                        {{ product.name }}
+                                    </th>
+                                    <th
+                                        scope="row"
+                                        class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
+                                    >
+                                        {{ product.real_price }}
+                                    </th>
+                                    <th
+                                        scope="row"
+                                        class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
+                                    >
+                                        {{ product.pivot.amount }}
+                                    </th>
+                                    <td
+                                        scope="row"
+                                        class="py-4 px-6 font-medium text-blue-50 whitespace-nowrap"
+                                    >
+                                        <Link
+                                            v-if="can.edit"
+                                            :href="`/product/${product.id}/edit`"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
+                                            >Edit</Link
+                                        >
+                                    </td>
+                                    <td class="">
+                                        <button
+                                            v-if="can.delete"
+                                            @click="
+                                                deleteProduct(
+                                                    order.id,
+                                                    product.id
+                                                )
+                                            "
+                                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </tr>
+                </template>
             </tbody>
         </table>
     </div>

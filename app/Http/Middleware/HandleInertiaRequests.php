@@ -40,15 +40,21 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => [
-                    'id' => Auth::user() ? Auth::user()->id : null,
-                    'username' => Auth::user() ? Auth::user()->username : null,
+                    'id' => Auth::user() ? Auth::user()->id : 0,
+                    'username' => Auth::user() ? Auth::user()->username : 'Guest',
+                    'autorized' => Auth::user() ? true : false,
                     'can' => Auth::user() ? [
                         'admin' => Auth::user()->role == 1,
                         'manager' => Auth::user()->role == 2,
                         'default' => Auth::user()->role == 3,
-                    ] : null,
+                    ] : null
                 ]
-            ]
+            ],
+            'flash' => function () use ($request) {
+                return [
+                    'cartAmount' => $request->session()->get('cartAmount'),
+                ];
+            },
         ]);
     }
 }

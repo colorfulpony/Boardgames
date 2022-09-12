@@ -1,16 +1,19 @@
 <template>
     <Head>
         <title>Home</title>
-        <meta
-            type="description"
-            content="Home"
-            head-key="description"
-        />
+        <meta type="description" content="Home" head-key="description" />
     </Head>
-    Home
+    <div class="">Home Page of Site</div>
 </template>
 
-<script setup>
+<script>
+export default {
+    // props: {
+    //     cart: Object,
+    // },
 
+    // mounted() {
+    //     console.log(this)
+    // },
+};
 </script>
-

@@ -71,7 +71,7 @@
 
 <script>
 export default {
-    layout: '',
+
 };
 </script>
 

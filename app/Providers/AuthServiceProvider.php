@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\UserSide;
 use App\Models\Post;
 use App\Models\Product;
 use App\Policies\OrderPolicy;
@@ -10,6 +11,7 @@ use App\Policies\PostPolicy;
 use App\Policies\PostsTagPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\UserPolicy;
+use App\Policies\UserSidePolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -28,6 +30,7 @@ class AuthServiceProvider extends ServiceProvider
         PostsTag::class => PostsTagPolicy::class,
         Product::class => ProductPolicy::class,
         User::class => UserPolicy::class,
+        UserSide::class => UserSidePolicy::class,
     ];
 
     /**

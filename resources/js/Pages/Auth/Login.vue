@@ -70,7 +70,7 @@
 
 <script>
 export default {
-    layout: "",
+
 };
 </script>
 
@@ -83,6 +83,10 @@ let form = useForm({
 });
 
 let submit = () => {
-    form.post("/login");
+    form.post("/login", {
+        onSuccess: (val) => {
+            console.log(val)
+        }
+    });
 };
 </script>

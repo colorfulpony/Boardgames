@@ -41,6 +41,7 @@ class User extends Authenticatable
     public function getPermissionsAttribute()
     {
         return [
+            'view_user_side_pages' => $this->role == 1 || $this->role == 2 || $this->role == 3,
             'items_view' => $this->role == 1 || $this->role == 2,
             'items_create' => $this->role == 1 || $this->role == 2,
             'items_update' => $this->role == 1 || $this->role == 2,

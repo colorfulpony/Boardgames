@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderProductController;
@@ -8,8 +9,9 @@ use App\Http\Controllers\PostsTagController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSide;
+use App\Http\Controllers\UserSideController;
 use App\Models\Order;
-use App\Models\OrderProductModel;
 use App\Models\Post;
 use App\Models\PostsTag;
 use App\Models\Product;
@@ -28,17 +30,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('login', [LoginController::class, 'login'])->name('login');
-Route::post('login', [LoginController::class, 'loginStore'])->name('login.store');
-Route::get('register', [LoginController::class, 'register'])->name('register');
-Route::post('register', [LoginController::class, 'registerStore'])->name('register.store');
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+// Route::get('/', function () {
+//     return inertia('Home');
+// });
 
-Route::middleware('auth')->group(function() {
-    Route::get('/', function () {
-        return inertia('Home');
-    });
+Route::get('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'loginStore'])->name('login.store');
+Route::get('/register', [LoginController::class, 'register'])->name('register');
+Route::post('/register', [LoginController::class, 'registerStore'])->name('register.store');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+Route::prefix('/user')->group(function () {
+    Route::get('/', [UserSideController::class, 'homePage'])->name('homePage');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::get('/products', [UserSideController::class, 'getAllProducts'])->name('getAllProducts');
+    Route::get('/product/{id}', [UserSideController::class, 'getProduct'])->name('getProduct');
+});
+
+Route::middleware('auth')->group(function () {
     Route::get('/posts-tags', [PostsTagController::class, 'index'])->name('posts-tag.index')->can('viewAny', PostsTag::class);
     Route::get('/posts-tag/create', [PostsTagController::class, 'create'])->name('posts-tag.create')->can('create', PostsTag::class);
     Route::post('/posts-tag/create', [PostsTagController::class, 'store'])->name('posts-tag.store')->can('create', PostsTag::class);
@@ -89,4 +99,3 @@ Route::middleware('auth')->group(function() {
     Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy')->can('delete', User::class);
     Route::get('/user/restore/{id}', [UserController::class, 'restore'])->name('user.restore')->can('restore', User::class);
 });
-

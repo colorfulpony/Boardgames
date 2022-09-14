@@ -19,24 +19,39 @@ class LoginController extends Controller
 
     public function loginStore(Request $request)
     {
-        $userId = User::where('email', $request->email)->get('id');
-        $itemsInCart = Cart::where('user_id', $userId[0]->id)->get();
-        $cart = [];
-        foreach($itemsInCart as $itemInCart) {
-            $productAndAmount = new stdClass();
-            $productAndAmount->product_id = $itemInCart->product_id;
-            $productAndAmount->amount = $itemInCart->amount;
-            array_push($cart, $productAndAmount);
-        }
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
 
         if (Auth::attempt($credentials)) {
+            $user = User::where('email', $request->email)->get('id');
+            $userId = $user[0]->id;
+
+            $productsData = $request->products;
+            foreach ($productsData as $productData) {
+                $product_id = $productData['product_id'];
+                $amount = $productData['amount'];
+
+                $productInCart = Cart::where('product_id', $product_id)->where('user_id', $userId)->first();
+                
+                if (!$productInCart) {
+                    Cart::create([
+                        'product_id' => $product_id,
+                        'amount' => $amount,
+                        'user_id' => $userId,
+                    ]);
+                } else {
+                    $productInCart->amount += $amount;
+                    $productInCart->save();
+                }
+            }
+
+            $cartAmount = Cart::where('user_id', $userId)->sum('amount');
+
             $request->session()->regenerate();
-            // dd($cart);
-            return redirect('/user')->with('cart', $cart);
+
+            return redirect('/user')->with('cartAmount', $cartAmount);
         }
 
 

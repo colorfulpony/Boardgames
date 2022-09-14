@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import NavLink from "./NavLink.vue";
 import Nav from "./Nav";
 export default {
@@ -39,27 +40,51 @@ export default {
     data() {
         return {
             cartAmount: 0,
-        }
+        };
     },
 
     updated() {
-        if (localStorage.getItem("cart")) {
-            let cart = localStorage.getItem("cart");
-            cart = JSON.parse(cart);
-            let cartItemsAmount = 0;
-            cart.forEach((productInCart) => {
-                cartItemsAmount += productInCart.amount;
-            });
-
-            this.cartAmount = cartItemsAmount;
+        if (this.$page.props.auth.user.autorized) {
+            this.getAuthUserCart();
         } else {
-            this.cartAmount = 0;
+            this.getUnauthUserCart();
+        }
+    },
+
+    mounted() {
+        if (this.$page.props.auth.user.autorized) {
+            this.getAuthUserCart();
+        } else {
+            this.getUnauthUserCart();
         }
     },
 
     computed: {
         username() {
             return this.$page.props.auth.user.username;
+        },
+    },
+
+    methods: {
+        getAuthUserCart(userId = this.$page.props.auth.user.id) {
+            axios.get(route("cart.get", userId)).then((res) => {
+                this.cartAmount = res.data;
+            });
+        },
+
+        getUnauthUserCart() {
+            if (localStorage.getItem("cart")) {
+                let cart = localStorage.getItem("cart");
+                cart = JSON.parse(cart);
+                let cartItemsAmount = 0;
+                cart.forEach((productInCart) => {
+                    cartItemsAmount += productInCart.amount;
+                });
+
+                this.cartAmount = cartItemsAmount;
+            } else {
+                this.cartAmount = 0;
+            }
         },
     },
 };

@@ -82,6 +82,11 @@ var __default__ = {
         return false;
       }
     }
+  },
+  methods: {
+    deleteLocalStorage: function deleteLocalStorage() {
+      localStorage.removeItem('cart');
+    }
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/*#__PURE__*/Object.assign(__default__, {
@@ -328,6 +333,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, 8
   /* PROPS */
   , ["active"])]), $options.auth ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["NavLink"], {
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return $options.deleteLocalStorage();
+    }),
     href: "/logout",
     method: "post",
     as: "button"

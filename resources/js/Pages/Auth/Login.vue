@@ -1,7 +1,7 @@
 <template>
     <div class="grid h-screen place-items-center">
         <form
-            @submit.prevent="submit"
+            @submit.prevent="submit()"
             class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         >
             <div
@@ -69,24 +69,43 @@
 </template>
 
 <script>
-export default {
-
-};
-</script>
-
-<script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
+export default {
+    data() {
+        return {
+            form: useForm({
+                email: "",
+                password: "",
+                products: [],
+            }),
+        };
+    },
 
-let form = useForm({
-    email: "",
-    password: "",
-});
+    methods: {
+        submit() {
+            this.getProductsFromLocalStorageCart()
+            this.form.post("/login");
+        },
 
-let submit = () => {
-    form.post("/login", {
-        onSuccess: (val) => {
-            console.log(val)
-        }
-    });
+        getProductsFromLocalStorageCart() {
+            this.form.products = []
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            if (cart) {
+                for (let i = 0; i < cart.length; i++) {
+                    let productData = {
+                        product_id: 0,
+                        amount: 0
+                    }
+                    productData.product_id = cart[i].id;
+                    productData.amount = cart[i].amount;
+                    this.form.products.push(productData)
+                }
+            }
+        },
+    },
+
+    mounted() {
+        this.getProductsFromLocalStorageCart();
+    },
 };
 </script>

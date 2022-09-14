@@ -42,10 +42,15 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::prefix('/user')->group(function () {
     Route::get('/', [UserSideController::class, 'homePage'])->name('homePage');
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::get('/products', [UserSideController::class, 'getAllProducts'])->name('getAllProducts');
     Route::get('/product/{id}', [UserSideController::class, 'getProduct'])->name('getProduct');
+
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+});
+
+Route::prefix('/fetch')->group(function () {
+    Route::get('/cart/{id}', [CartController::class, 'getCart'])->name('cart.get');
 });
 
 Route::middleware('auth')->group(function () {

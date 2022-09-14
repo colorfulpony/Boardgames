@@ -11,14 +11,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _NavLink_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NavLink.vue */ "./resources/js/Pages/Shared/NavLink.vue");
-/* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Nav */ "./resources/js/Pages/Shared/Nav.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _NavLink_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavLink.vue */ "./resources/js/Pages/Shared/NavLink.vue");
+/* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Nav */ "./resources/js/Pages/Shared/Nav.vue");
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    Nav: _Nav__WEBPACK_IMPORTED_MODULE_1__["default"],
-    NavLink: _NavLink_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+    Nav: _Nav__WEBPACK_IMPORTED_MODULE_2__["default"],
+    NavLink: _NavLink_vue__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -26,21 +29,45 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   updated: function updated() {
-    if (localStorage.getItem("cart")) {
-      var cart = localStorage.getItem("cart");
-      cart = JSON.parse(cart);
-      var cartItemsAmount = 0;
-      cart.forEach(function (productInCart) {
-        cartItemsAmount += productInCart.amount;
-      });
-      this.cartAmount = cartItemsAmount;
+    if (this.$page.props.auth.user.autorized) {
+      this.getAuthUserCart();
     } else {
-      this.cartAmount = 0;
+      this.getUnauthUserCart();
+    }
+  },
+  mounted: function mounted() {
+    if (this.$page.props.auth.user.autorized) {
+      this.getAuthUserCart();
+    } else {
+      this.getUnauthUserCart();
     }
   },
   computed: {
     username: function username() {
       return this.$page.props.auth.user.username;
+    }
+  },
+  methods: {
+    getAuthUserCart: function getAuthUserCart() {
+      var _this = this;
+
+      var userId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.$page.props.auth.user.id;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().get(route("cart.get", userId)).then(function (res) {
+        _this.cartAmount = res.data;
+      });
+    },
+    getUnauthUserCart: function getUnauthUserCart() {
+      if (localStorage.getItem("cart")) {
+        var cart = localStorage.getItem("cart");
+        cart = JSON.parse(cart);
+        var cartItemsAmount = 0;
+        cart.forEach(function (productInCart) {
+          cartItemsAmount += productInCart.amount;
+        });
+        this.cartAmount = cartItemsAmount;
+      } else {
+        this.cartAmount = 0;
+      }
     }
   }
 });

@@ -43,4 +43,10 @@ class CartController extends CoreController
 
         return redirect()->back()->with('cartAmount', $cartAmount);
     }
+
+    public function getCart($userId) {
+        $cartAmount = Cart::where('user_id', $userId)->sum('amount');
+
+        return $cartAmount;
+    }
 }
